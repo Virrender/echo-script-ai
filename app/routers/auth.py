@@ -1,4 +1,5 @@
-from fastapi import APIRouter,  HTTPException
+from fastapi import APIRouter,  HTTPException, Depends
+from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from app.database.connections import engine
 from pwdlib import PasswordHash
@@ -23,6 +24,8 @@ async def signup(user:UserSignup):
         session.commit()
     
     return {"message": "User created"}
+
+
 
 @router.post("/login")
 async def login(user: UserLogin):
