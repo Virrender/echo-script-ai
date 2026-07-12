@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta,timezone
-from fastapi.security import OAuth2PasswordBearer, HTTPBearer, HTTPAuthorizationCredentials
+from fastapi.security import OAuth2PasswordBearer, HTTPBearer, HTTPAuthorizationCredentials, OAuth2AuthorizationCodeBearer
 from jose import jwt, JWTError
 from fastapi import Depends, HTTPException, status,Header
 from typing import Annotated
@@ -8,17 +8,42 @@ from app.config import SECRET_KEY, ALGORITHM
 from app.database.connections import engine
 from app.models.user import Users
 
-security = HTTPBearer()
 
-# oauth2_scheme = OAuth2PasswordBearer(
-#     tokenUrl="login"
+#to login with username and password and we have to manually paste the token in Authorize button
+# if using HTTPBearer then login fn expects (user: UserLogin)
+#get_current_user expects 
+
+#def get_current_user(
+#     credentials: HTTPAuthorizationCredentials = Depends(security)
+# ):
+#     token= credentials.credentials
+
+# security = HTTPBearer()
+
+
+
+#this describes security scheme...
+#2.to login with same username and pasword and fastapi will automatically get the token
+# if using OAuth2PasswordBearer then login fn expects (form_data:OAuth2PasswordRequestForm=Depends())
+oauth2_scheme = OAuth2PasswordBearer(
+    tokenUrl="login"
+)
+#get_current_user expects
+
+
+
+
+#3 to login with google
+#oauth2_scheme = OAuth2AuthorizationCodeBearer(
+#     authorizationUrl="https://accounts.google.com/o/oauth2/auth",
+#     tokenUrl="https://oauth2.googleapis.com/token",
 # )
 
 
 def get_current_user(
-    credentials: HTTPAuthorizationCredentials = Depends(security)
+    token: str = Depends(oauth2_scheme)
 ):
-    token= credentials.credentials
+    
 
     try:
         payload = jwt.decode(

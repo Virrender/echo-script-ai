@@ -3,7 +3,7 @@ from sqlalchemy import (
     String, 
     Column, 
     DateTime,
-    func
+    func,
     )
 
 from app.database.connections import Base
@@ -15,8 +15,9 @@ class Users(Base):
         Integer,
         primary_key=True
     )
-    username=Column(String, nullable=False)
-    hashed_password=Column(String, nullable=False)
+    username=Column(String, nullable=True)
+    email=Column(String, nullable=True)
+    hashed_password=Column(String, nullable=True)
     created_at=Column(
         DateTime(timezone=True),
         server_default=func.now()

@@ -27,8 +27,8 @@ async def signup(user:UserSignup):
 
 
 
-@router.post("/login")
-async def login(user: UserLogin):
+@router.post("/login") 
+async def login(user: OAuth2PasswordRequestForm = Depends()): # if using OAuth2PasswordBearer then login fn expects (form_data:OAuth2PasswordRequestForm=Depends())
     with Session(engine) as session:
         db_user=(session.query(Users)
                  .filter(Users.username==user.username)
