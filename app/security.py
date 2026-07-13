@@ -13,12 +13,12 @@ from app.models.user import Users
 # if using HTTPBearer then login fn expects (user: UserLogin)
 #get_current_user expects 
 
-#def get_current_user(
+# def get_current_user(
 #     credentials: HTTPAuthorizationCredentials = Depends(security)
 # ):
 #     token= credentials.credentials
 
-# security = HTTPBearer()
+security = HTTPBearer()
 
 
 
@@ -41,10 +41,9 @@ oauth2_scheme = OAuth2PasswordBearer(
 
 
 def get_current_user(
-    token: str = Depends(oauth2_scheme)
+    credentials: HTTPAuthorizationCredentials = Depends(security)
 ):
-    
-
+    token= credentials.credentials
     try:
         payload = jwt.decode(
         token,

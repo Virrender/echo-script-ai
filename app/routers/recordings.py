@@ -15,6 +15,8 @@ recording_dir = BASE_DIR / "recordings"
 os.makedirs(recording_dir, exist_ok=True)
 router=APIRouter()
 
+from app.schemas.recordings import RecordingResponse
+
 
 
 
@@ -45,3 +47,22 @@ async def upload(
         print(f"current_user name ======>>>{current_user.username}")
         print("<<<======== Recordings MetaData Saved In Table ======>>>")
     return {"message": "saved"}
+
+
+@router.get("/recordings",
+           response_model=list[RecordingResponse])
+async def recordings(
+    current_user : Users = Depends(get_current_user)   
+):
+    with Session(engine) as session:
+        recordings=(
+            session.query(Recordings)
+            .filter(
+                Recordings.user_id == current_user.id
+            )
+            .all()
+        )
+        print(f"==========>{recordings}<==========")
+        return recordings
+        
+    

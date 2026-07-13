@@ -3,21 +3,21 @@ from typing import Annotated
 from app.security import get_current_user
 from fastapi import APIRouter, Header
 from jose import jwt
+from app.models.user import Users
 
 from app.config import SECRET_KEY, ALGORITHM
 router = APIRouter()
 
+
 @router.get("/me")
 async def me(
-    authorization: Annotated[str, Header()]
+    current_user : Users = Depends(get_current_user)
 ):
-    scheme, token = authorization.split()
-    payload = jwt.decode(
-        token,
-        SECRET_KEY,
-        algorithms=[ALGORITHM]
-    )
+    
+    username=current_user.username
+    user_id=current_user.id
 
-    print(payload)
-
-    return {"message": "ok"}
+    return {
+        "id":user_id,
+        "username":username,
+    }
