@@ -1,5 +1,6 @@
-from fastapi import APIRouter, UploadFile, File, Depends
+from fastapi import APIRouter, UploadFile, File, Depends, HTTPException
 from sqlalchemy.orm import Session
+from fastapi.responses import FileResponse
 from datetime import datetime, timezone
 from app.database.connections import engine
 from pwdlib import PasswordHash
@@ -65,4 +66,113 @@ async def recordings(
         print(f"==========>{recordings}<==========")
         return recordings
         
+
+@router.get("/recordings/{recording_id}")
+async def get_recording(
+    recording_id:int,
+    current_user : Users = Depends(get_current_user)
+):
+    print("GET RECORDING endpoint")
+    with Session(engine) as session:
+        recording=(
+            session.query(Recordings)
+            .filter(
+                Recordings.id==recording_id
+            )
+            .first()
+            )
+        if recording is None:
+            raise HTTPException(
+                status_code=404,
+                detail="Recording not found"
+            )
+        
+        if recording.user_id != current_user.id:
+            raise HTTPException(
+                status_code=403,
+                detail="This is not your recording"
+            )
+        
+        return recording
+
+
+@router.delete("/recordings/{recording_id}")
+async def delete_recording(
+    recording_id: int,
+    current_user: Users = Depends(get_current_user)
+):
+    with Session(engine) as session:
+        recording = (
+        session.query(Recordings)
+        .filter(
+        Recordings.id == recording_id
+        )
+        .first()
+    )  
+        if recording is None:
+            raise HTTPException(
+                status_code=404,
+                detail="Recording not found"
+            )
+        
+        if recording.user_id != current_user.id:
+            raise HTTPException(
+            status_code=403,
+            detail="Forbidden"
+        )
+
+        path= BASE_DIR / recording.audio_path
+        
+        if path.exists():
+            os.remove(path)
+        
+        session.delete(recording)
+        session.commit()
+
+        return {
+        "message": f"Recording_id {recording.id } deleted"
+    }
+        
+
+@router.get("/recordings/{recording_id}/audio")
+async def get_audio(
+    recording_id: int,
+    current_user: Users = Depends(get_current_user)
+):
+    print("GET AUDIO endpoint")
+    with Session(engine) as session:
+        recording = (
+        session.query(Recordings)
+        .filter(
+            Recordings.id == recording_id
+        )
+        .first()
+    )
+        if recording is None:
+            raise HTTPException(
+                status_code=404,
+                detail="Recording not found"
+            )
+        
+        if recording.user_id != current_user.id:
+            raise HTTPException(
+            status_code=403,
+            detail="Forbidden"
+        )
+        
+        filepath = BASE_DIR / recording.audio_path
+        if not filepath.exists():
+            raise HTTPException(
+                status_code=404,
+                detail="Audio file not found"
+            )
+        
+        print(f"======>>>>>{filepath}")
+        print(f"======>>>>>Exists {filepath.exists()}")
+        return FileResponse(filepath,
+                            media_type="audio/webm"
+                            )
+    
+
+
     
