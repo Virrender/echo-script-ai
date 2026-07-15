@@ -14,7 +14,11 @@ from app.config import BASE_DIR
 from app.schemas.user import UserSignup, UserLogin
 recording_dir = BASE_DIR / "recordings"
 os.makedirs(recording_dir, exist_ok=True)
-router=APIRouter()
+
+router=APIRouter(
+    prefix="/recordings",
+    tags=["Recordings"]
+)
 
 from app.schemas.recordings import RecordingResponse
 
@@ -50,7 +54,7 @@ async def upload(
     return {"message": "saved"}
 
 
-@router.get("/recordings",
+@router.get("",
            response_model=list[RecordingResponse])
 async def recordings(
     current_user : Users = Depends(get_current_user)   
@@ -67,7 +71,7 @@ async def recordings(
         return recordings
         
 
-@router.get("/recordings/{recording_id}")
+@router.get("/{recording_id}")
 async def get_recording(
     recording_id:int,
     current_user : Users = Depends(get_current_user)
@@ -96,7 +100,7 @@ async def get_recording(
         return recording
 
 
-@router.delete("/recordings/{recording_id}")
+@router.delete("/{recording_id}")
 async def delete_recording(
     recording_id: int,
     current_user: Users = Depends(get_current_user)
@@ -134,7 +138,7 @@ async def delete_recording(
     }
         
 
-@router.get("/recordings/{recording_id}/audio")
+@router.get("/{recording_id}/audio")
 async def get_audio(
     recording_id: int,
     current_user: Users = Depends(get_current_user)

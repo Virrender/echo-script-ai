@@ -10,7 +10,10 @@ from app.security import create_access_token
 from app.schemas.user import UserSignup, UserLogin
 
 
-router=APIRouter()
+router=APIRouter(
+    prefix="/auth",
+    tags=["Authentication"]
+)
 
 @router.post("/signup")
 async def signup(user:UserSignup):

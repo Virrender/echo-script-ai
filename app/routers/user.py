@@ -6,7 +6,9 @@ from jose import jwt
 from app.models.user import Users
 
 from app.config import SECRET_KEY, ALGORITHM
-router = APIRouter()
+router = APIRouter(
+    tags=["Users"]
+)
 
 
 @router.get("/me")
