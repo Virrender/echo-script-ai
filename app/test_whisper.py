@@ -1,10 +1,14 @@
-import whisper
+# from config import BASE_DIR
+# print("=====>>Loading model...")
 
-print("=====>>Loading model...")
 
-model = whisper.load_model("base")
+# audio_path = BASE_DIR / "recordings" / "2a561633-2a4b-4cc1-94f5-248f465aaf73.webm"
 
-print("======>>Model loaded!")
+# print(audio_path)
+# print(audio_path.exists())
 
-result = model.transcribe("app\recordings\2a561633-2a4b-4cc1-94f5-248f465aaf73.webm")
-print(result["text"])
+# print("======>>Model loaded!")
+
+
+# print(result["text"])
+# print(result.keys())
