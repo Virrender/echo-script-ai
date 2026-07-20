@@ -1,5 +1,5 @@
-myvenv
+backend/myvenv
 *__pycache__
 *.pyc
 
-app/recordings
+backend/app/recordings

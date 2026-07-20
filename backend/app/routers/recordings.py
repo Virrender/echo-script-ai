@@ -41,14 +41,20 @@ async def upload(
 
     relative_path = f"recordings/{filename}"
 
-    result = model.transcribe(str(filepath))
-    print(result["text"])
+    try:
+        result = model.transcribe(str(filepath))
+        transcript=result["text"]
+    except Exception as e:
+        print(f"Whisper Error: {e}")
+        transcript = None
+
+    print(transcript)
 
     with Session(engine) as session:
         recording = Recordings(
             created_at=datetime.now(timezone.utc),
             audio_path=str(relative_path),  # to save in database
-            transcript=result["text"],
+            transcript=transcript,
             user_id=current_user.id,
         )
         session.add(recording)
@@ -57,9 +63,8 @@ async def upload(
         print(f"current_user name ======>>>{current_user.username}")
         print("<<<======== Recordings MetaData Saved In Table ======>>>")
 
-    print(result["text"])
 
-    return {"message": "saved", "transcript": result["text"]}
+    return {"message": "saved", "transcript": transcript}
 
 
 @router.get("", response_model=list[RecordingResponse])
