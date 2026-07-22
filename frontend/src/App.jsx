@@ -1,26 +1,47 @@
 
+import { useState } from 'react';
 import './App.css'
-import Hero from './components/Hero'
+
 import Navbar from './components/Navbar'
+import Sidebar from './components/Sidebar';
+import MainContent from './components/MainContent';
 
 
+const recordings = [
+    {
+        id: 1,
+        title: "Meeting 1"
+    },
+    {
+        id: 2,
+        title: "Meeting 2"
+    },
+    {
+        id: 3,
+        title: "Meeting 3"
+    }
+];
 
 function App() {
+
+  const [selected, setSelected]= useState(null);
+
+
 return (
   <>
-  <Navbar>
-    <button>Upload</button>
-  </Navbar>
+  <Navbar />
 
-  <Navbar>
-    <p>Login</p>
-  </Navbar>
-
-  <Hero
-  title="Echo Script"
-  subtitle="Your AI notes maker with audio transcript "
+  <Sidebar 
+    recordings={recordings}
+    setSelected={setSelected}  
   />
+
+  <MainContent
+    selected={selected}
+
   
+  />
+
   </>
 );
 }
