@@ -1,5 +1,21 @@
-backend/myvenv
+# Backend
+
 *__pycache__
 *.pyc
 
 backend/app/recordings
+
+
+# Frontend
+frontend/node_modules/
+frontend/dist/ #just a good pratice although not used yet
+
+
+# VS Code
+.vscode/
+
+# OS files, just a good pratice although not used yet
+.DS_Store
+Thumbs.db
+
+*env*
