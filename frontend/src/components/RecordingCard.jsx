@@ -1,10 +1,13 @@
 
-function RecordingCard({ recording, setSelected }){
+function RecordingCard({recording, onClick}){
 
     return (
-        <button onClick={()=> setSelected(recording)}>
-            Recording {recording.id}
+        <div>
+        <button 
+        onClick={onClick}>
+            {recording.title}
         </button>
+        </div>
     )
 }
 

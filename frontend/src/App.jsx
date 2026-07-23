@@ -29,18 +29,20 @@ function App() {
 
 return (
   <>
+
   <Navbar />
 
+  <div className="flex gap-4"> 
   <Sidebar 
     recordings={recordings}
     setSelected={setSelected}  
   />
-
   <MainContent
     selected={selected}
 
-  
   />
+  </div>
+
 
   </>
 );

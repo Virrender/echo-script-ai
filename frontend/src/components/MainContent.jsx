@@ -7,7 +7,7 @@ function MainContent({selected}){
     }
 
     return (
-        <main>
+        <main className="flex-1 ">
             <h2>{selected.title}</h2>
         </main>
     )

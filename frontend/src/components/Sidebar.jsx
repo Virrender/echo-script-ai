@@ -6,20 +6,23 @@ function Sidebar({recordings, setSelected }){
 
     return (
         <>
-        <aside>
+        <aside className="w-72 p-4 " >
             <button>+ New Recording</button>
-        </aside>
 
-        {recordings.map(recording => (
-            <RecordingCard
+            <div>
+
+            {recordings.map(recording => (
+            <RecordingCard 
                 key={recording.id}
                 recording={recording}
-                setSelected={setSelected}
+                onClick={() => setSelected(recording)}
                 />
 
         ))}
+        </div>
+        </aside>
 
-
+        
 
         </>
 
