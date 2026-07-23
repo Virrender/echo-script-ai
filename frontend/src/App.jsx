@@ -25,18 +25,29 @@ const recordings = [
 function App() {
 
   const [selected, setSelected]= useState(null);
+  const [sidebaropen, setSidebaropen]= useState(true);
 
 
 return (
   <>
 
-  <Navbar />
+  <Navbar 
+  ontoggleSidebar={()=> setSidebaropen(prev => !prev)}
+  />
 
   <div className="flex gap-4"> 
-  <Sidebar 
+
+  {sidebaropen && (
+          <Sidebar 
     recordings={recordings}
-    setSelected={setSelected}  
+    setSelected={setSelected}
+    sidebaropen={setSidebaropen} 
+    selected={selected} 
   />
+  )
+
+  }  
+
   <MainContent
     selected={selected}
 
