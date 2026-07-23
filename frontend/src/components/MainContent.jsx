@@ -3,12 +3,16 @@
 function MainContent({selected}){
 
     if (!selected){
-        return <h2 className="flex-1 p-4">No recording selected</h2>
+        return(
+        <main className="flex-1 flex items-center justify-center">
+         <h2 >No recording selected</h2>
+        </main>
+        )
     }
 
     return (
-        <main className="flex-1 p-4 ">
-            <h2>{selected.title}</h2>
+        <main className="flex-1 flex items-center justify-center">
+            <h2>{selected.transcript}</h2>
         </main>
     )
 };

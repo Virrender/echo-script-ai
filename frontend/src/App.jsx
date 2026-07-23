@@ -1,62 +1,27 @@
 
-import { useState } from 'react';
+import { Routes, Route } from 'react-router-dom'
+
+import Login from './pages/Login'
+import Signup from './pages/Signup'
+import Dashboard from './pages/Dashboard'
+
 import './App.css'
 
-import Navbar from './components/Navbar'
-import Sidebar from './components/Sidebar';
-import MainContent from './components/MainContent';
 
 
-const recordings = [
-    {
-        id: 1,
-        title: "Meeting 1"
-    },
-    {
-        id: 2,
-        title: "Meeting 2"
-    },
-    {
-        id: 3,
-        title: "Meeting 3"
-    }
-];
+
 
 function App() {
+  return (<>
+  <Routes>
 
-  const [selected, setSelected]= useState(null);
-  const [sidebaropen, setSidebaropen]= useState(true);
+    <Route  path="/" element={<Login />} />
+    <Route  path="/signup" element={<Signup />} />
+    <Route  path="/dashboard" element={<Dashboard />} />
 
-
-return (
-  <>
-
-  <Navbar 
-  ontoggleSidebar={()=> setSidebaropen(prev => !prev)}
-  />
-
-  <div className="flex gap-4"> 
-
-  {sidebaropen && (
-          <Sidebar 
-    recordings={recordings}
-    setSelected={setSelected}
-    sidebaropen={setSidebaropen} 
-    selected={selected} 
-  />
+  </Routes>
+  </>
   )
 
-  }  
-
-  <MainContent
-    selected={selected}
-
-  />
-  </div>
-
-
-  </>
-);
 }
-
 export default App
