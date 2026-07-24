@@ -11,13 +11,13 @@ function Dashboard() {
   const [sidebaropen, setSidebaropen]= useState(true);
   const [recordings, setRecordings] = useState([]);
 
-useEffect(() =>{
-  fetch("http://127.0.0.1:8000/recordings")
-      .then(response => response.json())
-      .then(data =>{
-        setRecordings(data);
-      })
-},[]);
+// useEffect(() =>{
+//   fetch("http://127.0.0.1:8000/recordings")
+//       .then(response => response.json())
+//       .then(data =>{
+//         setRecordings(data);
+//       })
+// },[]);
 
 
 

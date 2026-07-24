@@ -22,9 +22,9 @@ function Navbar({ontoggleSidebar}){
             <div className="flex items-center gap-3">
 
         
-                <h2>Login</h2>
+                <h2>User Profile</h2>
         
-                <h2>Signup</h2>
+                
             
         
             </div>
