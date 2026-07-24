@@ -11,7 +11,7 @@ function RecordingCard({recording, onClick, isSelected}){
                 `w-full p-3 rounded text-left cursor-pointer  ${isSelected ? "bg-violet-100":""}`
             }
             onClick={onClick}>
-                {recording.created_at}
+                {recording.title}
             </button>
             </div>
 

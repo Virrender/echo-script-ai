@@ -27,6 +27,7 @@ async function handleLogin(e){
             password:password,
         }),
     });
+
     const data= await response.json();
 
     if(response.ok){
@@ -67,7 +68,8 @@ value={password}
 onChange={(e)=> setPassword(e.target.value)} />
     </div>
     <div className="p-2 m-4 border border-white">
-<button type="submit">Login</button>
+<button className='border cursor-pointer'
+type="submit">Login</button>
     </div>
     <h2>{error}</h2>
     </form>

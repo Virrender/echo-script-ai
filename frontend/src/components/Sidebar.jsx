@@ -1,13 +1,14 @@
 import RecordingCard from "./RecordingCard";
 import { Plus } from 'lucide-react';
 
-function Sidebar({recordings, setSelected, selected }){
+function Sidebar({recordings, setSelected, selected, onNewRecording }){
 
 
     return (
         <>
         <aside className="w-72 p-4 h-screen  " >
-            <button  className=" flex items-center gap-2 w-full p-3 rounded text-left"
+            <button onClick={onNewRecording}
+             className=" flex items-center cursor-pointer gap-2 w-full p-3 rounded text-left"
             >
                  New Recording <Plus size={18}/> </button>
 
