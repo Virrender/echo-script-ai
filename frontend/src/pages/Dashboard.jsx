@@ -52,6 +52,8 @@ const recordings = [
 function Dashboard() {  
   const [selected, setSelected]= useState(null);
   const [sidebaropen, setSidebaropen]= useState(true);
+  const [recordingKey, setRecordingKey] = useState(0);
+
   
 
 // useEffect(() =>{
@@ -81,12 +83,15 @@ return (
     setSelected={setSelected}
     sidebaropen={setSidebaropen} 
     selected={selected} 
-    onNewRecording={()=>
+
+    onNewRecording={()=>{
+      setRecordingKey(prev => prev + 1);
       setSelected({
         id: null,
         title: "New Recording",
         isNew: true,
       })
+      }
     }
   />
   )
@@ -94,7 +99,8 @@ return (
   }  
 
   <MainContent
-    selected={selected}
+  key={recordingKey}
+  selected={selected}
 
   />
   </div>
