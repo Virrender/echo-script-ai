@@ -37,7 +37,7 @@ async function loadRecordings() {
 }
  
   useEffect(() =>{
-   loadRecordings();
+   loadRecordings(); // this is just new React ESLint rule, we can ignore it
   },[]);
 
   return (

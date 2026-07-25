@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+const inputStyles =
+  "w-full px-4 py-3  rounded-xl border border-gray-300 bg-white text-[#2F2A44] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8B5CF6] transition";
+
+
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -35,42 +39,67 @@ function Login() {
 
   return (
     <>
-      <div className="p-3">
-        <h1>Welcome Back to Echo Script</h1>
-        <h2>Instant Voice to Transcript</h2>
-        <form onSubmit={(e) => handleLogin(e)}>
-          <div className="p-2 m-4 ">
-            {/* <label htmlFor="username">Enter Username </label> */}
+      <div className="min-h-screen flex items-center justify-center bg-[#F4F0FF] ">
+        <div className="w-full max-w-md rounded-3xl bg-white shadow-xl p-8">
+            <div className="text-center mb-8">
+                <h1 className="text-4xl font-bold tracking-tight text-[#99299f]"
+                >
+                    Echo Script</h1>
+
+                <p className="mt-3 text-[#6B7280]"
+                >
+                    Record. Transcribe. Focus.</p>
+
+            </div>
+
+        <form onSubmit={(e) => handleLogin(e)}
+            className="mt-8 space-y-5">
+          
             <input
-              className="border rounded p-2"
+              className="w-full px-4 py-3  rounded-xl border border-gray-300 bg-white text-[#80578b] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#e7d0ee] transition"
               type="text"
               name="username"
               placeholder="Username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
-          </div>
-          <div className="p-2 m-4">
-            {/* <label htmlFor="password">Enter Password </label> */}
+          
             <input
-              className="border rounded p-2"
+              className="w-full px-4 py-3  rounded-xl border border-gray-300 bg-white text-[#80578b] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#e7d0ee] transition"
               type="password"
               name="password"
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-          </div>
-          <div className=" m-4 ">
+          
+         
             <button
-              className="border rounded px-5 py-2 cursor-pointer"
+              className="
+w-full
+rounded-xl
+bg-[#b878d4]
+py-3
+font-semibold
+text-white
+transition
+hover:bg-[#b260be]
+active:scale-[0.98]
+cursor-pointer
+shadow-md
+"
               type="submit"
             >
               Login
             </button>
-          </div>
-          <h2>{error}</h2>
+
+<p className="text-sm text-center text-red-500">
+    {error}
+</p>
         </form>
+
+        </div>
+
       </div>
     </>
   );
