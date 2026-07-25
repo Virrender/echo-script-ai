@@ -12,8 +12,8 @@ function Dashboard() {
   const [recordings, setRecordings]=useState([])
   const [recordingKey, setRecordingKey] = useState(0);
 
-  useEffect(() =>{
-    async function loadRecordings() {
+
+async function loadRecordings() {
 
       const token = localStorage.getItem("token");
 
@@ -34,10 +34,10 @@ function Dashboard() {
     }else{
       console.error(data);
     }
-};
-
-loadRecordings();
-
+}
+ 
+  useEffect(() =>{
+   loadRecordings();
   },[]);
 
   return (
@@ -64,7 +64,10 @@ loadRecordings();
             />
           )}
 
-          <MainContent key={recordingKey} selected={selected} />
+          <MainContent 
+          key={recordingKey} 
+          selected={selected} 
+          refreshRecording={loadRecordings} />
         </div>
       </div>
     </>

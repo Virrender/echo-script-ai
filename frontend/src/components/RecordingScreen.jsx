@@ -3,7 +3,9 @@ import { useRef } from "react";
 import { useState } from "react";
 
 
-function RecordingScreen(){
+function RecordingScreen( {refreshRecording}){
+
+
   const recorderRef = useRef(null);
   const streamRef = useRef(null);
   const intervalRef = useRef(null);
@@ -66,6 +68,7 @@ function RecordingScreen(){
       }
 
       setIsUploading(false);
+      await refreshRecording();
       setIsCompleted(true);
     };
 

@@ -2,7 +2,7 @@ import RecordingScreen from "./RecordingScreen";
 import RecordingViewer from "./RecordingViewer";
 
 
-function MainContent({ selected }) {
+function MainContent({ selected, refreshRecording }) {
 
   if (!selected) {
     return (
@@ -13,12 +13,13 @@ function MainContent({ selected }) {
   }
 
   if (selected?.isNew) {
-    return <RecordingScreen />;
+    return <RecordingScreen 
+    refreshRecording={refreshRecording} />
   }
 
   return (
   <>
-    <RecordingViewer recording={selected} />;
+    <RecordingViewer recording={selected} />
 
   </>
   );

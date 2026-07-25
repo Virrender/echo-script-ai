@@ -2,7 +2,10 @@
 
 function RecordingViewer({ recording }) {
 
-        <main className="flex flex-1 items-center justify-center">
+    return(
+        <>
+
+                <main className="flex flex-1 items-center justify-center">
       <div className="max-w-3xl">
 
         <h2 className="text-2xl font-bold mb-4">
@@ -15,6 +18,12 @@ function RecordingViewer({ recording }) {
 
       </div>
     </main>
+        
+        
+        </>
+    )
+
+
 
 }
 export default RecordingViewer
