@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const inputStyles =
-  "w-full px-4 py-3  rounded-xl border border-gray-300 bg-white text-[#2F2A44] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8B5CF6] transition";
 
 
 function Login() {

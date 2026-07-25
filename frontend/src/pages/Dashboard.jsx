@@ -42,7 +42,7 @@ async function loadRecordings() {
 
   return (
     <>
-      <div className=" h-screen flex flex-col">
+      <div className="min-h-screen bg-[#F4F0FF] flex flex-col">
         <Navbar ontoggleSidebar={() => setSidebaropen((prev) => !prev)} />
 
         <div className="flex flex-1 gap-4">
