@@ -3,10 +3,10 @@ function RecordingCard({ recording, onClick, isSelected }) {
     <>
       <div>
         <button
-          className={`w-full p-3 rounded text-left cursor-pointer  ${isSelected ? "bg-violet-100" : ""}`}
+          className={`w-full p-3 rounded text-left cursor-pointer  ${isSelected ? "bg-gray-100" : ""}`}
           onClick={onClick}
         >
-          {recording.title}
+          {recording.transcript.slice(0, 20)}
         </button>
       </div>
     </>
