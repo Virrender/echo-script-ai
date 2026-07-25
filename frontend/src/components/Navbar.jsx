@@ -7,7 +7,7 @@ function Navbar({ ontoggleSidebar }) {
             bg-white
             border-b
             border-gray-200
-            shadow-sm
+            
             px-6
             flex
             items-center

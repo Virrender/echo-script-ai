@@ -40,7 +40,7 @@ function Login() {
       <div className="min-h-screen flex items-center justify-center bg-[#F4F0FF] ">
         <div className="w-full max-w-md rounded-3xl bg-white shadow-xl p-8">
             <div className="text-center mb-8">
-                <h1 className="text-4xl font-bold tracking-tight text-[#99299f]"
+                <h1 className="text-4xl font-bold tracking-tight text-[#504e51]"
                 >
                     Echo Script</h1>
 
@@ -54,7 +54,7 @@ function Login() {
             className="mt-8 space-y-5">
           
             <input
-              className="w-full px-4 py-3  rounded-xl border border-gray-300 bg-white text-[#80578b] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#e7d0ee] transition"
+              className="w-full px-4 py-3  rounded-xl border border-gray-300 bg-white text-[#413e42] placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-[#d1ccd2cf] transition"
               type="text"
               name="username"
               placeholder="Username"
@@ -63,7 +63,7 @@ function Login() {
             />
           
             <input
-              className="w-full px-4 py-3  rounded-xl border border-gray-300 bg-white text-[#80578b] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#e7d0ee] transition"
+              className="w-full px-4 py-3  rounded-xl border border-gray-300 bg-white text-[#413e42] placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-[#d1ccd2cf] transition"
               type="password"
               name="password"
               placeholder="Password"
@@ -76,12 +76,13 @@ function Login() {
               className="
 w-full
 rounded-xl
-bg-[#b878d4]
+bg-[#b5b2b6de]
 py-3
 font-semibold
+text-xl
 text-white
 transition
-hover:bg-[#b260be]
+hover:bg-[#969196]
 active:scale-[0.98]
 cursor-pointer
 shadow-md
