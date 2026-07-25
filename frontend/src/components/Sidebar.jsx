@@ -1,39 +1,30 @@
 import RecordingCard from "./RecordingCard";
-import { Plus } from 'lucide-react';
+import { Plus } from "lucide-react";
 
-function Sidebar({recordings, setSelected, selected, onNewRecording }){
+function Sidebar({ recordings, setSelected, selected, onNewRecording }) {
+  return (
+    <>
+      <aside className="w-72 p-4 h-screen  ">
+        <button
+          onClick={onNewRecording}
+          className=" flex items-center cursor-pointer gap-2 w-full p-3 rounded text-left"
+        >
+          New Recording <Plus size={18} />{" "}
+        </button>
 
-
-    return (
-        <>
-        <aside className="w-72 p-4 h-screen  " >
-            <button onClick={onNewRecording}
-             className=" flex items-center cursor-pointer gap-2 w-full p-3 rounded text-left"
-            >
-                 New Recording <Plus size={18}/> </button>
-
-            <div>
-
-            {recordings.map(recording => (
-            <RecordingCard 
-                key={recording.id}
-                recording={recording}
-                onClick={() => setSelected(recording)}
-                isSelected={selected?.id === recording.id}
-                />
-
-        ))}
+        <div>
+          {recordings.map((recording) => (
+            <RecordingCard
+              key={recording.id}
+              recording={recording}
+              onClick={() => setSelected(recording)}
+              isSelected={selected?.id === recording.id}
+            />
+          ))}
         </div>
-        </aside>
-
-        
-
-        </>
-
-
-
-        
-    );
+      </aside>
+    </>
+  );
 }
 
 export default Sidebar;
