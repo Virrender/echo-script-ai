@@ -1,7 +1,7 @@
 
 import { useRef } from "react";
 import { useState } from "react";
-
+import { Audio } from "react-loader-spinner";
 
 function RecordingScreen( {refreshRecording}){
 
@@ -123,35 +123,102 @@ if (isCompleted) {
 
     return(
 
-    <main className="flex flex-1  flex-col items-center justify-center">
-        <div className="p-1">
-          <h2 className={isRecording ? "text-red-500 font-bold" : ""}>
-            {isRecording ? "Recordingg..." : "New Recording"}
-          </h2>
-        </div>
+<main className="flex flex-1  flex-col items-center justify-center">
 
-        <div className="p">
-          <p
-            className={
-              isRecording ? "text-red-500 text-xl font-bold" : "text-xl"
-            }
-          >
-            {minutes}:{secs}
-          </p>
+  <div  className="
+            flex
+            flex-col
+            items-center
+            bg-stone-100
+            rounded-3xl
+            shadow-lg
+            px-14
+            py-12
+            "
+>
+
+<div>
+  <h1
+    className={` text-center ${
+      isRecording ? " text-gray-500 mb-7 text-2xl " : "text-[#2F2A44] font-bold text-3xl"
+    }`}
+  >
+    {isRecording ? "Listening....." : "Ready to Listen"}
+  </h1>
+
+  {!isRecording && (
+    <p className="mt-2 text-center mb-6 text-gray-500">
+      Tap the button below to begin.
+    </p>
+  )}
+</div>
+
 
           <button
-            className="border mt-3 rounded p-1.5 cursor-pointer "
-            onClick={() => {
+          className="cursor-pointer transition duration-200 active:scale-95
+          "
+          onClick={() => {
               if (isRecording) {
                 stopRecording();
               } else {
                 startRecording();
               }
-            }}
-          >
-            {isRecording ? "Stop Recording" : "Start Recording"}
+            }}>
+              
+   <div
+      className="
+      w-14
+      h-14
+      rounded-full
+      flex
+      items-center
+      justify-center
+      bg-white
+                ">
+
+              <div
+              className={`"
+                  border-[3px]
+                  border-white
+                  bg-[#FF453A]
+                  transition-all
+                  duration-300
+                  "  ${isRecording ? "w-8 h-8 rounded-lg":" w-13 h-13 rounded-full"}   ` }>
+                
+              </div>
+            </div>
           </button>
-        </div>
+
+
+
+
+<p
+className={`
+mt-6
+text-lg
+font-light
+tracking-wide
+
+${isRecording
+    ? "text-[#6d6a6aca]"
+    : "text-[#928a93c2]"}
+`}
+      >
+   {minutes}:{secs}
+</p>
+
+<div className="mt-6 h-10 flex items-center justify-center">
+    <Audio
+        height="40"
+        width="120"
+        color="#664079"
+        visible={isRecording}
+        ariaLabel="recording-wave"
+    />
+</div>
+
+
+  </div>
       </main>
 
     )
