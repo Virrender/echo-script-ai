@@ -1,7 +1,10 @@
 
 import { useRef } from "react";
 import { useState } from "react";
-import { Audio } from "react-loader-spinner";
+import { Audio, ThreeDots } from "react-loader-spinner";
+
+import { Clock3 ,BadgeCheck} from "lucide-react";
+import { formatRecordingDate } from "../utils/formatDate";
 
 function RecordingScreen( {refreshRecording}){
 
@@ -91,28 +94,120 @@ function RecordingScreen( {refreshRecording}){
 
  if (isUploading) {
       return (
-        <div className="flex flex-1  flex-col items-center justify-center p-2">
-          <p>Uploading...</p>
-        </div>
+
+        <main           
+        className="
+flex flex-1  flex-col items-center justify-center
+
+            ">
+          <div
+  className="
+            flex
+            flex-col
+            items-center
+            bg-stone-100
+            rounded-3xl
+            shadow-lg
+            px-14
+            py-12
+            "
+ >
+
+              <h1
+              className="
+                text-3xl
+                font-bold
+                text-[#2F2A44]
+                mt-4
+                "
+              >
+                Creating your transcript </h1>
+              <p
+              className="
+                mt-6
+                text-center
+                text-sm
+                text-gray-500
+                "
+                              
+              >
+                Converting speech into searchable text.</p>
+
+                <ThreeDots
+                  visible={true}
+                  height="70"
+                  width="70"
+                  color="#745383"
+                  radius="9"
+                  ariaLabel="three-dots-loading"
+                  wrapperStyle={{}}
+                  wrapperClass=""
+                  />
+              <p
+              className="
+                  mt-6
+                  text-sm
+                  text-gray-400
+                  "
+              >
+                This usually takes a few seconds.</p>
+
+          </div>
+
+        </main>
+
       );
     }
 
 
 if (isCompleted) {
       return (
-        <div className="flex flex-1  flex-col items-center justify-center">
+        <div className="flex flex-1  flex-col items-center px-10 py-10 justify-center">
           {transcript && (
-            <div>
-              <p
-                className={
-                  isRecording ? "text-red-400 text-xl font-bold" : "text-xl"
-                }
-              >
-                {minutes}:{secs}
-              </p>
+            <div >
+              <span className="inline-flex items-center gap-2">
+                <BadgeCheck className="h-6 w-6 mt-2 text-green-500" />
+                              <h3 className="
+                text-3xl
 
-              <h3 className="font-bold mt-2 mb-1">Transcript</h3>
-              <p>{transcript}</p>
+                font-bold
+
+                text-[#2F2A44]
+                ">
+                   Transcript Ready</h3>
+              </span>
+
+                      {/* <div className="mt-3 flex items-center gap-2 text-gray-400">
+          <Clock3 size={14}></Clock3>
+          <span> {formatRecordingDate(refreshRecording.created_at)}
+</span>
+        </div> */}
+
+        <hr className="my-6 border-gray-200" />
+
+          <div
+className="
+bg-[#FAF9FC]
+
+rounded-2xl
+
+p-6
+"
+>
+
+<p
+className="
+leading-8
+
+text-gray-700
+
+whitespace-pre-wrap
+"
+>
+{transcript}
+</p>
+
+</div>
             </div>
           )}
         </div>
@@ -120,15 +215,20 @@ if (isCompleted) {
     };
 
 
+//   starting or recording screen
 
     return(
 
 <main className="flex flex-1  flex-col items-center justify-center">
 
   <div  className="
+              w-full
+            max-w-md
+            min-h-[380px]
             flex
             flex-col
             items-center
+            justify-center
             bg-stone-100
             rounded-3xl
             shadow-lg
