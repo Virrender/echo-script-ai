@@ -1,4 +1,5 @@
 from fastapi import APIRouter, UploadFile, File, Depends, HTTPException
+from sqlalchemy import desc
 from sqlalchemy.orm import Session
 from fastapi.responses import FileResponse
 from datetime import datetime, timezone
@@ -73,6 +74,7 @@ async def recordings(current_user: Users = Depends(get_current_user)):
         recordings = (
             session.query(Recordings)
             .filter(Recordings.user_id == current_user.id)
+            .order_by(desc(Recordings.created_at))
             .all()
         )
         print(f"==========>{recordings}<==========")
