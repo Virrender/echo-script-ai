@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-
-
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -39,20 +37,15 @@ function Login() {
     <>
       <div className="min-h-screen flex items-center justify-center bg-[#F4F0FF] ">
         <div className="w-full max-w-md rounded-3xl bg-white shadow-xl p-8">
-            <div className="text-center mb-8">
-                <h1 className="text-4xl font-bold tracking-tight text-[#504e51]"
-                >
-                    Echo Script</h1>
+          <div className="text-center mb-8">
+            <h1 className="text-4xl font-bold tracking-tight text-[#504e51]">
+              Echo Script
+            </h1>
 
-                <p className="mt-3 text-[#6B7280]"
-                >
-                    Record. Transcribe. Focus.</p>
+            <p className="mt-3 text-[#6B7280]">Record. Transcribe. Focus.</p>
+          </div>
 
-            </div>
-
-        <form onSubmit={(e) => handleLogin(e)}
-            className="mt-8 space-y-5">
-          
+          <form onSubmit={(e) => handleLogin(e)} className="mt-8 space-y-5">
             <input
               className="w-full px-4 py-3  rounded-xl border border-gray-300 bg-white text-[#413e42] placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-[#d1ccd2cf] transition"
               type="text"
@@ -61,7 +54,7 @@ function Login() {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
-          
+
             <input
               className="w-full px-4 py-3  rounded-xl border border-gray-300 bg-white text-[#413e42] placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-[#d1ccd2cf] transition"
               type="password"
@@ -70,8 +63,7 @@ function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-          
-         
+
             <button
               className="
 w-full
@@ -92,13 +84,9 @@ shadow-md
               Login
             </button>
 
-<p className="text-sm text-center text-red-500">
-    {error}
-</p>
-        </form>
-
+            <p className="text-sm text-center text-red-500">{error}</p>
+          </form>
         </div>
-
       </div>
     </>
   );

@@ -2,11 +2,11 @@ export function formatRecordingDate(dateString) {
   const date = new Date(dateString);
   const today = new Date();
 
-  if(
-    date.getDate() === today.getDate()&&
-    date.getMonth() === today.getMonth()&&
+  if (
+    date.getDate() === today.getDate() &&
+    date.getMonth() === today.getMonth() &&
     date.getFullYear() === today.getFullYear()
-  ){
+  ) {
     return "Today";
   }
 
@@ -21,9 +21,8 @@ export function formatRecordingDate(dateString) {
     return "Yesterday";
   }
 
-  return date.toLocaleDateString("en-US",{
-    month:"short",
-    day:"numeric"
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
   });
-
 }

@@ -4,7 +4,8 @@ import { Plus } from "lucide-react";
 function Sidebar({ recordings, setSelected, selected, onNewRecording }) {
   return (
     <>
-      <aside className="
+      <aside
+        className="
         w-72
         bg-[#fefdff]
         border-r
@@ -15,7 +16,7 @@ function Sidebar({ recordings, setSelected, selected, onNewRecording }) {
         flex-col
         min-h-0
         "
-        >
+      >
         <button
           onClick={onNewRecording}
           className="
@@ -24,23 +25,15 @@ function Sidebar({ recordings, setSelected, selected, onNewRecording }) {
             items-center
             justify-center
             gap-2
-
             rounded-xl
-
             bg-[#745383]
             text-white
-
             font-medium
-
             py-3
-
             shadow-sm
-
             transition
-
             hover:bg-[#4c2f5b]
             active:scale-[0.98]
-
             cursor-pointer
             "
         >
@@ -48,9 +41,9 @@ function Sidebar({ recordings, setSelected, selected, onNewRecording }) {
         </button>
 
         <div className="mt-8 ml-3 mb-3">
-            <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-400">
-                Recent Recordings
-            </h3>
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-400">
+            Recent Recordings
+          </h3>
         </div>
 
         <div className="flex-1 overflow-y-auto space-y-2">
@@ -63,7 +56,6 @@ function Sidebar({ recordings, setSelected, selected, onNewRecording }) {
             />
           ))}
         </div>
-
       </aside>
     </>
   );

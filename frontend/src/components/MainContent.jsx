@@ -1,9 +1,7 @@
 import RecordingScreen from "./RecordingScreen";
 import RecordingViewer from "./RecordingViewer";
 
-
 function MainContent({ selected, refreshRecording }) {
-
   if (!selected) {
     return (
       <main className="flex-1 flex items-center justify-center  ">
@@ -13,18 +11,14 @@ function MainContent({ selected, refreshRecording }) {
   }
 
   if (selected?.isNew) {
-    return <RecordingScreen 
-    refreshRecording={refreshRecording} />
+    return <RecordingScreen refreshRecording={refreshRecording} />;
   }
 
   return (
-  <>
-    <RecordingViewer recording={selected} />
-
-  </>
+    <>
+      <RecordingViewer recording={selected} />
+    </>
   );
-  
-  };
+}
 
-
-export default MainContent
+export default MainContent;

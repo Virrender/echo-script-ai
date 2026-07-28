@@ -1,4 +1,4 @@
-from fastapi import APIRouter, UploadFile, File, Depends, HTTPException
+from fastapi import APIRouter, UploadFile, File, Depends, HTTPException, Query
 from sqlalchemy import desc
 from sqlalchemy.orm import Session
 from fastapi.responses import FileResponse
@@ -69,12 +69,19 @@ async def upload(
 
 
 @router.get("", response_model=list[RecordingResponse])
-async def recordings(current_user: Users = Depends(get_current_user)):
+async def recordings(
+    limit:int = Query(
+        default=10,
+        gt=1,
+        le=100
+    ),
+    current_user: Users = Depends(get_current_user)):
     with Session(engine) as session:
         recordings = (
             session.query(Recordings)
             .filter(Recordings.user_id == current_user.id)
             .order_by(desc(Recordings.created_at))
+            .limit(limit)
             .all()
         )
         print(f"==========>{recordings}<==========")
@@ -85,7 +92,7 @@ async def recordings(current_user: Users = Depends(get_current_user)):
 async def get_recording(
     recording_id: int, current_user: Users = Depends(get_current_user)
 ):
-    print("GET RECORDING endpoint")
+    print("GET, RECORDING endpoint")
     with Session(engine) as session:
         recording = (
             session.query(Recordings).filter(Recordings.id == recording_id).first()

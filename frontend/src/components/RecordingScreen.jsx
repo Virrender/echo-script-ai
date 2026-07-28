@@ -1,14 +1,11 @@
-
 import { useRef } from "react";
 import { useState } from "react";
 import { Audio, ThreeDots } from "react-loader-spinner";
 
-import { Clock3 ,BadgeCheck} from "lucide-react";
-import { formatRecordingDate } from "../utils/formatDate";
+import { BadgeCheck } from "lucide-react";
+// import { formatRecordingDate } from "../utils/formatDate";
 
-function RecordingScreen( {refreshRecording}){
-
-
+function RecordingScreen({ refreshRecording }) {
   const recorderRef = useRef(null);
   const streamRef = useRef(null);
   const intervalRef = useRef(null);
@@ -92,16 +89,16 @@ function RecordingScreen( {refreshRecording}){
   const minutes = String(Math.floor(seconds / 60)).padStart(2, "0");
   const secs = String(seconds % 60).padStart(2, "0");
 
- if (isUploading) {
-      return (
-
-        <main           
+  if (isUploading) {
+    return (
+      <main
         className="
 flex flex-1  flex-col items-center justify-center
 
-            ">
-          <div
-  className="
+            "
+      >
+        <div
+          className="
             flex
             flex-col
             items-center
@@ -111,120 +108,112 @@ flex flex-1  flex-col items-center justify-center
             px-14
             py-12
             "
- >
-
-              <h1
-              className="
+        >
+          <h1
+            className="
                 text-3xl
                 font-bold
                 text-[#2F2A44]
                 mt-4
                 "
-              >
-                Creating your transcript </h1>
-              <p
-              className="
+          >
+            Creating your transcript{" "}
+          </h1>
+          <p
+            className="
                 mt-6
                 text-center
                 text-sm
                 text-gray-500
                 "
-                              
-              >
-                Converting speech into searchable text.</p>
+          >
+            Converting speech into searchable text.
+          </p>
 
-                <ThreeDots
-                  visible={true}
-                  height="70"
-                  width="70"
-                  color="#745383"
-                  radius="9"
-                  ariaLabel="three-dots-loading"
-                  wrapperStyle={{}}
-                  wrapperClass=""
-                  />
-              <p
-              className="
+          <ThreeDots
+            visible={true}
+            height="70"
+            width="70"
+            color="#745383"
+            radius="9"
+            ariaLabel="three-dots-loading"
+            wrapperStyle={{}}
+            wrapperClass=""
+          />
+          <p
+            className="
                   mt-6
                   text-sm
                   text-gray-400
                   "
-              >
-                This usually takes a few seconds.</p>
+          >
+            This usually takes a few seconds.
+          </p>
+        </div>
+      </main>
+    );
+  }
 
-          </div>
-
-        </main>
-
-      );
-    }
-
-
-if (isCompleted) {
-      return (
-        <div className="flex flex-1  flex-col items-center px-10 py-10 justify-center">
-          {transcript && (
-            <div >
-              <span className="inline-flex items-center gap-2">
-                <BadgeCheck className="h-6 w-6 mt-2 text-green-500" />
-                              <h3 className="
+  if (isCompleted) {
+    return (
+      <div className="flex flex-1  flex-col items-center px-10 py-10 justify-center">
+        {transcript && (
+          <div>
+            <span className="inline-flex items-center gap-2">
+              <BadgeCheck className="h-6 w-6 mt-2 text-green-500" />
+              <h3
+                className="
                 text-3xl
 
                 font-bold
 
                 text-[#2F2A44]
-                ">
-                   Transcript Ready</h3>
-              </span>
+                "
+              >
+                Transcript Ready
+              </h3>
+            </span>
 
-                      {/* <div className="mt-3 flex items-center gap-2 text-gray-400">
+            {/* <div className="mt-3 flex items-center gap-2 text-gray-400">
           <Clock3 size={14}></Clock3>
           <span> {formatRecordingDate(refreshRecording.created_at)}
 </span>
         </div> */}
 
-        <hr className="my-6 border-gray-200" />
+            <hr className="my-6 border-gray-200" />
 
-          <div
-className="
-bg-[#FAF9FC]
-
-rounded-2xl
-
-p-6
-"
->
-
-<p
-className="
-leading-8
-
-text-gray-700
-
-whitespace-pre-wrap
-"
->
-{transcript}
-</p>
-
-</div>
+            <div
+              className="
+                  bg-[#FAF9FC]
+                  rounded-2xl
+                  p-6
+                  "
+            >
+              <p
+                className="
+                leading-8
+                text-gray-700
+                whitespace-pre-wrap
+                "
+              >
+                {transcript}
+              </p>
             </div>
-          )}
-        </div>
-      );
-    };
+          </div>
+        )}
+      </div>
+    );
+  }
 
+  //   starting or recording screen
 
-//   starting or recording screen
-
-    return(
-
-<main className="flex flex-1  flex-col items-center justify-center">
-
-  <div  className="
+  return (
+    <main className="flex flex-1  flex-col items-center justify-center">
+      <div
+        className="
               w-full
             max-w-md
-            min-h-[380px]
+            min-h-95
             flex
             flex-col
             items-center
@@ -235,38 +224,38 @@ whitespace-pre-wrap
             px-14
             py-12
             "
->
+      >
+        <div>
+          <h1
+            className={` text-center ${
+              isRecording
+                ? " text-gray-500 mb-7 text-2xl "
+                : "text-[#2F2A44] font-bold text-3xl"
+            }`}
+          >
+            {isRecording ? "Listening....." : "Ready to Listen"}
+          </h1>
 
-<div>
-  <h1
-    className={` text-center ${
-      isRecording ? " text-gray-500 mb-7 text-2xl " : "text-[#2F2A44] font-bold text-3xl"
-    }`}
-  >
-    {isRecording ? "Listening....." : "Ready to Listen"}
-  </h1>
+          {!isRecording && (
+            <p className="mt-2 text-center mb-6 text-gray-500">
+              Tap the button below to begin.
+            </p>
+          )}
+        </div>
 
-  {!isRecording && (
-    <p className="mt-2 text-center mb-6 text-gray-500">
-      Tap the button below to begin.
-    </p>
-  )}
-</div>
-
-
-          <button
+        <button
           className="cursor-pointer transition duration-200 active:scale-95
           "
           onClick={() => {
-              if (isRecording) {
-                stopRecording();
-              } else {
-                startRecording();
-              }
-            }}>
-              
-   <div
-      className="
+            if (isRecording) {
+              stopRecording();
+            } else {
+              startRecording();
+            }
+          }}
+        >
+          <div
+            className="
       w-14
       h-14
       rounded-full
@@ -274,55 +263,45 @@ whitespace-pre-wrap
       items-center
       justify-center
       bg-white
-                ">
-
-              <div
+                "
+          >
+            <div
               className={`"
                   border-[3px]
                   border-white
                   bg-[#FF453A]
                   transition-all
                   duration-300
-                  "  ${isRecording ? "w-8 h-8 rounded-lg":" w-13 h-13 rounded-full"}   ` }>
-                
-              </div>
-            </div>
-          </button>
+                  "  ${isRecording ? "w-8 h-8 rounded-lg" : " w-13 h-13 rounded-full"}   `}
+            ></div>
+          </div>
+        </button>
 
+        <p
+          className={`
+            mt-6
+            text-lg
+            font-light
+            tracking-wide
 
+          ${isRecording ? "text-[#6d6a6aca]" : "text-[#928a93c2]"}
+          `}
+                  >
+          {minutes}:{secs}
+        </p>
 
-
-<p
-className={`
-mt-6
-text-lg
-font-light
-tracking-wide
-
-${isRecording
-    ? "text-[#6d6a6aca]"
-    : "text-[#928a93c2]"}
-`}
-      >
-   {minutes}:{secs}
-</p>
-
-<div className="mt-6 h-10 flex items-center justify-center">
-    <Audio
-        height="40"
-        width="120"
-        color="#664079"
-        visible={isRecording}
-        ariaLabel="recording-wave"
-    />
-</div>
-
-
-  </div>
-      </main>
-
-    )
-
+        <div className="mt-6 h-10 flex items-center justify-center">
+          <Audio
+            height="40"
+            width="120"
+            color="#664079"
+            visible={isRecording}
+            ariaLabel="recording-wave"
+          />
+        </div>
+      </div>
+    </main>
+  );
 }
 
-export default RecordingScreen
+export default RecordingScreen;
