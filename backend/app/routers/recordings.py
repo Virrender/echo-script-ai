@@ -25,7 +25,7 @@ os.makedirs(recording_dir, exist_ok=True)
 
 router = APIRouter(prefix="/recordings", tags=["Recordings"])
 
-from app.schemas.recordings import RecordingResponse
+from app.schemas.recordings import PaginatedRecordingResponse
 
 
 @router.post("/upload")
@@ -60,6 +60,7 @@ async def upload(
         )
         session.add(recording)
         session.commit()
+        session.close()
         print(f"current _user_id=====>{current_user.id}")
         print(f"current_user name ======>>>{current_user.username}")
         print("<<<======== Recordings MetaData Saved In Table ======>>>")
@@ -68,8 +69,12 @@ async def upload(
     return {"message": "saved", "transcript": transcript}
 
 
-@router.get("", response_model=list[RecordingResponse])
+@router.get("", response_model=PaginatedRecordingResponse)
 async def recordings(
+    page:int= Query(
+        default=1,
+        ge=1
+    ),
     limit:int = Query(
         default=10,
         gt=1,
@@ -82,10 +87,19 @@ async def recordings(
             .filter(Recordings.user_id == current_user.id)
             .order_by(desc(Recordings.created_at))
             .limit(limit)
+            .offset((page-1)*limit)
             .all()
         )
+        total= (
+            session.query(Recordings)
+            .filter(Recordings.user_id == current_user.id)
+            .count()
+        )
         print(f"==========>{recordings}<==========")
-        return recordings
+        return {
+            "items":recordings,
+            "total":total,
+        }
 
 
 @router.get("/{recording_id}")
