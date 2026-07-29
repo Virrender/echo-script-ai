@@ -9,6 +9,11 @@ function Dashboard() {
   const [sidebaropen, setSidebaropen] = useState(true);
   const [recordings, setRecordings] = useState([]);
   const [recordingKey, setRecordingKey] = useState(0);
+  const [mainView, setMainView] = useState("viewer");
+
+
+
+
 
   async function loadRecordings() {
     const token = localStorage.getItem("token");
@@ -35,6 +40,27 @@ function Dashboard() {
     loadRecordings(); // this is just new React ESLint rule, we can ignore it
   }, []);
 
+function handleSeeAll(){
+  setMainView("library")
+}
+
+function handleNewRecording(){
+    setMainView("recording");
+    setRecordingKey((prev)=> prev+1)
+    setSelected({
+        id: null,
+        title: "New Recording",
+        isNew: true,
+    })
+}
+
+function handleSelectRecording(recording){
+  setMainView("viewer");
+  setSelected(recording);
+}
+
+
+  console.log(mainView);
   return (
     <>
       <div className="h-screen bg-[#F4F0FF] flex flex-col overflow-hidden">
@@ -42,20 +68,18 @@ function Dashboard() {
 
         <div className="flex flex-1 gap-4 min-h-0">
           {sidebaropen && (
-            <Sidebar
+            <Sidebar 
               recordings={recordings}
               setSelected={setSelected}
               sidebaropen={setSidebaropen}
+              setMainView={setMainView}
               selected={selected}
-
-              onNewRecording={() => {
-                setRecordingKey((prev) => prev + 1);
-                setSelected({
-                  id: null,
-                  title: "New Recording",
-                  isNew: true,
-                });
-              }}
+              
+              onSeeAll={handleSeeAll}
+              onNewRecording={handleNewRecording}
+              onSelectRecording={handleSelectRecording}
+          
+    
             />
           )}
 
@@ -63,6 +87,9 @@ function Dashboard() {
             key={recordingKey}
             selected={selected}
             refreshRecording={loadRecordings}
+            recordings={recordings}
+            mainView={mainView}
+
           />
         </div>
       </div>

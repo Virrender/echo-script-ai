@@ -1,7 +1,7 @@
 import RecordingCard from "./RecordingCard";
-import { Plus } from "lucide-react";
+import { Plus, ChevronsRight } from "lucide-react";
 
-function Sidebar({ recordings, setSelected, selected, onNewRecording }) {
+function Sidebar({ recordings,  selected, onNewRecording, onSeeAll, onSelectRecording }) {
   return (
     <>
       <aside
@@ -11,10 +11,11 @@ function Sidebar({ recordings, setSelected, selected, onNewRecording }) {
         border-r
         border-gray-200
         px-4
-        py-6
+        py-4
         flex
         flex-col
         min-h-0
+        
         "
       >
         <button
@@ -40,22 +41,31 @@ function Sidebar({ recordings, setSelected, selected, onNewRecording }) {
           New Recording <Plus size={18} />{" "}
         </button>
 
-        <div className="mt-8 ml-3 mb-3">
+        <div className="mt-4 ml-3 mb-3">
           <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-400">
             Recent Recordings
           </h3>
         </div>
 
-        <div className="flex-1 overflow-y-auto space-y-2">
+        <div className="flex-1  min-h-0  overflow-y-auto space-y-2 border-y border-gray-300">
           {recordings.map((recording) => (
             <RecordingCard
               key={recording.id}
               recording={recording}
-              onClick={() => setSelected(recording)}
+              onClick={() => onSelectRecording(recording)}
               isSelected={selected?.id === recording.id}
+              onSelectRecording={onSelectRecording}
             />
           ))}
         </div>
+                  
+
+        <button 
+        onClick={onSeeAll}
+        className=" w-full gap-0.5 flex justify-center items-center  bg-white text-sm font-medium transition p-1 cursor-pointer text-gray-400  mt-1">
+          See all   <ChevronsRight className="flex justify-center items-center mt-0.5 " size={15}/>
+        </button>
+
       </aside>
     </>
   );

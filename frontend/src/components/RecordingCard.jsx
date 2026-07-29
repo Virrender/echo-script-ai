@@ -9,7 +9,7 @@ function RecordingCard({ recording, onClick, isSelected }) {
         className={`
             w-full
             rounded-xl
-            p-4
+            p-2
             text-left
             border
             border-transparent
@@ -40,7 +40,7 @@ function RecordingCard({ recording, onClick, isSelected }) {
                 {formatRecordingDate(recording.created_at)}
               </span>
             </div>
-            
+
       </button>
     </>
   );
