@@ -2,11 +2,13 @@ import RecordingScreen from "./RecordingScreen";
 import RecordingViewer from "./RecordingViewer";
 import RecordingLibrary from "./RecordingLibrary";
 
-function MainContent({ selected, refreshRecording, recordings,   mainView }) {
+function MainContent({ 
+  selected, refreshRecording, 
+    mainView,
+ }) {
   
   if (mainView === "library"){
     return <RecordingLibrary
-    recordings={recordings}
     />
 
   }
