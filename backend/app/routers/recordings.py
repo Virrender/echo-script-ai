@@ -1,8 +1,8 @@
 from fastapi import APIRouter, UploadFile, File, Depends, HTTPException, Query
-from sqlalchemy import desc
+from sqlalchemy import desc, asc
 from sqlalchemy.orm import Session
 from fastapi.responses import FileResponse
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from app.database.connections import engine
 from pwdlib import PasswordHash
 import os
@@ -80,21 +80,36 @@ async def recordings(
         gt=1,
         le=100
     ),
+    search:str | None = Query(default=None),
+    order:str = Query (default="desc"),
     current_user: Users = Depends(get_current_user)):
+
     with Session(engine) as session:
-        recordings = (
+
+        query=(
             session.query(Recordings)
             .filter(Recordings.user_id == current_user.id)
+        )
+
+        if search :
+            query=query.filter(
+                Recordings.transcript.ilike(f"%{search}%")
+            )
+
+        if order == "desc":
+            query = query.order_by(desc(Recordings.created_at))
+        else:
+            query = query.order_by(asc(Recordings.created_at))
+        
+        recordings = (
+            query
             .order_by(desc(Recordings.created_at))
             .limit(limit)
             .offset((page-1)*limit)
             .all()
         )
-        total= (
-            session.query(Recordings)
-            .filter(Recordings.user_id == current_user.id)
-            .count()
-        )
+        total= (query.count())
+        
         print(f"==========>{recordings}<==========")
         return {
             "items":recordings,
