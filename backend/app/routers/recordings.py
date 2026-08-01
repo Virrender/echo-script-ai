@@ -1,9 +1,10 @@
 from fastapi import APIRouter, UploadFile, File, Depends, HTTPException, Query
-from sqlalchemy import desc, asc
+from sqlalchemy import desc, asc, func
 from sqlalchemy.orm import Session
 from fastapi.responses import FileResponse
 from datetime import datetime, timezone, timedelta
 from app.database.connections import engine
+from app.enums import Order
 from pwdlib import PasswordHash
 import os
 import uuid
@@ -43,13 +44,37 @@ async def upload(
     relative_path = f"recordings/{filename}"
 
     try:
-        result = model.transcribe(str(filepath))
+        result = model.transcribe(
+            str(filepath),
+            word_timestamps=True)
         transcript=result["text"]
+        segments=result["segments"]
+
+        clean_segments = [
+                {
+                    "start": segment["start"],
+                    "end": segment["end"],
+                    "text": segment["text"],
+                    "words": [
+                        {
+                            "word": word["word"],
+                            "start": word["start"],
+                            "end": word["end"],
+                        }
+                        for word in segment["words"]
+                    ],
+                }
+                for segment in segments
+            ]
+
+
     except Exception as e:
         print(f"Whisper Error: {e}")
         transcript = None
 
-    print(transcript)
+    # print(transcript)
+    # print(result.keys())
+    # print(segments[0])
 
     with Session(engine) as session:
         recording = Recordings(
@@ -57,6 +82,7 @@ async def upload(
             audio_path=str(relative_path),  # to save in database
             transcript=transcript,
             user_id=current_user.id,
+            segments=clean_segments
         )
         session.add(recording)
         session.commit()
@@ -66,7 +92,7 @@ async def upload(
         print("<<<======== Recordings MetaData Saved In Table ======>>>")
 
 
-    return {"message": "saved", "transcript": transcript}
+    return {"message": "saved", "transcript": transcript, "segments": clean_segments}
 
 
 @router.get("", response_model=PaginatedRecordingResponse)
@@ -81,21 +107,21 @@ async def recordings(
         le=100
     ),
     search:str | None = Query(default=None),
-    order:str = Query (default="desc"),
+    order:Order = Query (default=Order.desc),
     current_user: Users = Depends(get_current_user)):
 
     with Session(engine) as session:
+
 
         query=(
             session.query(Recordings)
             .filter(Recordings.user_id == current_user.id)
         )
-
-        if search :
-            query=query.filter(
+        
+        if search:
+            query = query.filter(
                 Recordings.transcript.ilike(f"%{search}%")
             )
-
         if order == "desc":
             query = query.order_by(desc(Recordings.created_at))
         else:
