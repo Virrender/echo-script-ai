@@ -10,7 +10,12 @@ function MainContent({
     libraryRecordings,
     page,
     setPage,
-    totalPages
+    totalPages,
+
+    search,
+    setSearch,
+
+
  }) {
   
   if (mainView === "library"){
@@ -19,6 +24,9 @@ function MainContent({
             page={page}
             setPage={setPage}
             totalPages={totalPages}
+            search={search}
+            setSearch={setSearch}
+
     />
 
   }

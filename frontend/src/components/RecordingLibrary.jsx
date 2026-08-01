@@ -6,7 +6,9 @@ function RecordingLibrary(
 {  libraryRecordings,
   page,
   setPage,
-  totalPages,}
+  totalPages,
+  search,
+  setSearch,}
 )
 {
 
@@ -39,7 +41,6 @@ function RecordingLibrary(
 //   setPage(1)
 // }
 
-console.log(libraryRecordings);
     return (
 
       
@@ -84,6 +85,41 @@ console.log(libraryRecordings);
         Browse and manage all your recordings.
     </p>
 
+</div>
+
+<div
+  className="
+    w-full
+    max-w-sm
+    mx-auto
+    mt-5
+    mb-5
+  "
+>
+  <input
+    type="text"
+    placeholder="Search recordings..."
+    value={search}
+    onChange={(e) => setSearch(e.target.value)}
+    className="
+      w-full
+      rounded-full
+      border
+      border-gray-200
+      bg-white
+      px-4
+      py-2.5
+      text-sm
+      text-gray-700
+      placeholder:text-gray-400
+      shadow-sm
+      outline-none
+      transition
+      focus:border-[#745383]
+      focus:ring-2
+      focus:ring-[#745383]/20
+    "
+  />
 </div>
 
     

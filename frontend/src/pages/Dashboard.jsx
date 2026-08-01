@@ -15,14 +15,17 @@ function Dashboard() {
   const [libraryRecordings, setLibraryRecordings] = useState([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  
   const limit = 10;
   const totalPages = Math.ceil(total / limit);
 
-  async function loadLibraryRecordings(page,limit) {
+  async function loadLibraryRecordings(page,limit, search="") {
       const token = localStorage.getItem("token");
   
       const response = await fetch(
-       `http://127.0.0.1:8000/recordings?page=${page}&limit=${limit}`,
+       `http://127.0.0.1:8000/recordings?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}`,
   
         {
           headers: {
@@ -41,8 +44,8 @@ function Dashboard() {
     }
   
   useEffect(() => {
-    loadLibraryRecordings(page,limit); // this is just new React ESLint rule, we can ignore it
-  },[page]);
+    loadLibraryRecordings(page,limit,debouncedSearch); // this is just new React ESLint rule, we can ignore it
+  },[page,debouncedSearch]);
 
   async function loadSidebarRecordings(page,limit) {
     const token = localStorage.getItem("token");
@@ -72,6 +75,22 @@ function Dashboard() {
     loadSidebarRecordings(1,limit); // this is just new React ESLint rule, we can ignore it
   },[]);
 
+useEffect(() => {
+  const timer = setTimeout(() => {
+    setDebouncedSearch(search);
+  }, 500);
+
+
+  return () => clearTimeout(timer);
+}, [search]);
+
+// useEffect(() => {
+//   console.log("Searching:", debouncedSearch);
+// }, [debouncedSearch]);
+
+useEffect(() => {
+  setPage(1);
+}, [debouncedSearch]);
 
 async function refreshRecordings() {
 
@@ -107,12 +126,6 @@ function handleSelectRecording(recording){
 }
 
 
-
-
-
-
-  console.log(mainView);
-
   return (
     <>
       <div className="h-screen bg-[#F4F0FF] flex flex-col overflow-hidden">
@@ -143,7 +156,10 @@ function handleSelectRecording(recording){
             setPage={setPage}
             totalPages={totalPages}
 
+            search={search}
+            setSearch={setSearch}
           />
+          
         </div>
       </div>
     </>
