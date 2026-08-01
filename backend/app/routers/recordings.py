@@ -117,6 +117,9 @@ async def recordings(
             session.query(Recordings)
             .filter(Recordings.user_id == current_user.id)
         )
+
+        if search:
+            search = search.strip()
         
         if search:
             query = query.filter(
@@ -129,7 +132,6 @@ async def recordings(
         
         recordings = (
             query
-            .order_by(desc(Recordings.created_at))
             .limit(limit)
             .offset((page-1)*limit)
             .all()
