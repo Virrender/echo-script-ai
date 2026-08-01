@@ -65,19 +65,19 @@ function RecordingScreen({ refreshRecordings }) {
       if (response.ok) {
         // setTranscript(data.transcript);
         setCompletedRecording({
-    id: data.id,
-    transcript: data.transcript,
-    segments: data.segments,
-    created_at: data.created_at,
-  });
+            id: data.id,
+            transcript: data.transcript,
+            segments: data.segments,
+            created_at: data.created_at,
+          });
+          await refreshRecordings();
+          setIsCompleted(true);
       } else {
-        console.error(data);
+        alert(data.detail);
       }
 
       setIsUploading(false);
-      await refreshRecordings();
-      setIsCompleted(true);
-      console.log("Completed");
+
     };
 
     recorder.start();

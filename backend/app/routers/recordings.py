@@ -1,6 +1,7 @@
 from fastapi import APIRouter, UploadFile, File, Depends, HTTPException, Query
 from sqlalchemy import desc, asc, func
 from sqlalchemy.orm import Session
+from fastapi import HTTPException
 from fastapi.responses import FileResponse
 from datetime import datetime, timezone, timedelta
 from app.database.connections import engine
@@ -49,6 +50,18 @@ async def upload(
             str(filepath),
             word_timestamps=True)
         transcript=result["text"]
+        transcript=transcript.strip()
+        print(f"'{transcript}'")
+
+        if not transcript:
+            if filepath.exists():
+                filepath.unlink()
+            raise HTTPException(
+                status_code=400,
+                detail="No speech detected. Please say something and try again."
+            )
+        
+
         segments=result["segments"]
 
         clean_segments = [
@@ -68,10 +81,16 @@ async def upload(
                 for segment in segments
             ]
 
+    except HTTPException:
+        # Re-raise our own HTTPException
+        raise
 
     except Exception as e:
-        print(f"Whisper Error: {e}")
-        transcript = None
+            print(f"Whisper Error: {e}")
+            raise HTTPException(
+                status_code=500,
+                detail="Failed to transcribe audio."
+        )
 
     # print(transcript)
     # print(result.keys())
@@ -95,6 +114,8 @@ async def upload(
 
 
     return {"message": "saved", "id": recording.id, "transcript": transcript, "segments": clean_segments, "created_at": recording.created_at,}
+
+
 
 
 @router.get("", response_model=PaginatedRecordingResponse)
