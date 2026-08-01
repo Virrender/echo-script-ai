@@ -14,6 +14,7 @@ function MainContent({
 
     search,
     setSearch,
+    onSelectRecording,
 
 
  }) {
@@ -26,6 +27,7 @@ function MainContent({
             totalPages={totalPages}
             search={search}
             setSearch={setSearch}
+            onSelectRecording={onSelectRecording}
 
     />
 

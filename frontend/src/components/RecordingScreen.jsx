@@ -1,8 +1,8 @@
 import { useRef } from "react";
 import { useState } from "react";
 import { Audio, ThreeDots } from "react-loader-spinner";
-
-import { BadgeCheck } from "lucide-react";
+import RecordingViewer from "./RecordingViewer";
+// import { BadgeCheck } from "lucide-react";
 // import { formatRecordingDate } from "../utils/formatDate";
 
 function RecordingScreen({ refreshRecordings }) {
@@ -12,14 +12,15 @@ function RecordingScreen({ refreshRecordings }) {
   const audioChunksRef = useRef([]);
 
   const [isRecording, setIsRecording] = useState(false);
-  const [transcript, setTranscript] = useState("");
+  // const [transcript, setTranscript] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const [seconds, setSeconds] = useState(0);
   const [isCompleted, setIsCompleted] = useState(false);
+  const [completedRecording, setCompletedRecording] = useState(null);
 
   async function startRecording() {
     audioChunksRef.current = [];
-    setTranscript("");
+    // setTranscript("");
     setIsCompleted(false);
     setSeconds(0);
 
@@ -62,7 +63,13 @@ function RecordingScreen({ refreshRecordings }) {
       const data = await response.json();
 
       if (response.ok) {
-        setTranscript(data.transcript);
+        // setTranscript(data.transcript);
+        setCompletedRecording({
+    id: data.id,
+    transcript: data.transcript,
+    segments: data.segments,
+    created_at: data.created_at,
+  });
       } else {
         console.error(data);
       }
@@ -155,56 +162,56 @@ flex flex-1  flex-col items-center justify-center
     );
   }
 
-  if (isCompleted) {
-    return (
-      <div className="flex flex-1  flex-col items-center px-10 py-10 justify-center">
-        {transcript && (
-          <div>
-            <span className="inline-flex items-center gap-2">
-              <BadgeCheck className="h-6 w-6 mt-2 text-green-500" />
-              <h3
-                className="
-                text-3xl
+  if (isCompleted && completedRecording) {
+  return (
+    <RecordingViewer recording={completedRecording} />
+  );
+}
 
-                font-bold
+  // if (isCompleted) {
+  //   return (
+  //     <div className="flex flex-1  flex-col items-center px-10 py-10 justify-center">
+  //       {transcript && (
+  //         <div>
+  //           <span className="inline-flex items-center gap-2">
+  //             <BadgeCheck className="h-6 w-6 mt-2 text-green-500" />
+  //             <h3
+  //               className="
+  //               text-3xl
 
-                text-[#2F2A44]
-                "
-              >
-                Transcript Ready
-              </h3>
-            </span>
+  //               font-bold
 
-            {/* <div className="mt-3 flex items-center gap-2 text-gray-400">
-          <Clock3 size={14}></Clock3>
-          <span> {formatRecordingDate(refreshRecording.created_at)}
-</span>
-        </div> */}
+  //               text-[#2F2A44]
+  //               "
+  //             >
+  //               Transcript Ready
+  //             </h3>
+  //           </span>
 
-            <hr className="my-6 border-gray-200" />
+  //           <hr className="my-6 border-gray-200" />
 
-            <div
-              className="
-                  bg-[#FAF9FC]
-                  rounded-2xl
-                  p-6
-                  "
-            >
-              <p
-                className="
-                leading-8
-                text-gray-700
-                whitespace-pre-wrap
-                "
-              >
-                {transcript}
-              </p>
-            </div>
-          </div>
-        )}
-      </div>
-    );
-  }
+  //           <div
+  //             className="
+  //                 bg-[#FAF9FC]
+  //                 rounded-2xl
+  //                 p-6
+  //                 "
+  //           >
+  //             <p
+  //               className="
+  //               leading-8
+  //               text-gray-700
+  //               whitespace-pre-wrap
+  //               "
+  //             >
+  //               {transcript}
+  //             </p>
+  //           </div>
+  //         </div>
+  //       )}
+  //     </div>
+  //   );
+  // }
 
   //   starting or recording screen
 

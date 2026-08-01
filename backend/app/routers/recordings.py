@@ -42,6 +42,7 @@ async def upload(
         f.write(await audio.read())
 
     relative_path = f"recordings/{filename}"
+    clean_segments = []
 
     try:
         result = model.transcribe(
@@ -61,7 +62,7 @@ async def upload(
                             "start": word["start"],
                             "end": word["end"],
                         }
-                        for word in segment["words"]
+                        for word in segment.get("words", [])
                     ],
                 }
                 for segment in segments
@@ -86,13 +87,14 @@ async def upload(
         )
         session.add(recording)
         session.commit()
-        session.close()
+        session.refresh(recording)
+
         print(f"current _user_id=====>{current_user.id}")
         print(f"current_user name ======>>>{current_user.username}")
         print("<<<======== Recordings MetaData Saved In Table ======>>>")
 
 
-    return {"message": "saved", "transcript": transcript, "segments": clean_segments}
+    return {"message": "saved", "id": recording.id, "transcript": transcript, "segments": clean_segments, "created_at": recording.created_at,}
 
 
 @router.get("", response_model=PaginatedRecordingResponse)

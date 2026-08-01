@@ -8,38 +8,12 @@ function RecordingLibrary(
   setPage,
   totalPages,
   search,
-  setSearch,}
+  setSearch,
+  onSelectRecording,}
 )
 {
 
-// const [total, setTotal] = useState(0); 
-// const [libraryRecordings, setLibraryRecordings] = useState([]);
-// const [page, setPage] = useState(1);
-//  let limit = 10;
 
-
-// const arr=Array.from({length:totalPages}).map((_,index)=>index+1)
-
-
-
-
-
-
-// function handleNext(){
-//   setPage((prev)=>prev+1)
-// }
-
-// function handlePrevious(){
-//   setPage((prev)=>prev-1)
-// }
-
-// // function handlelast(){
-// //   setPage(totalPages)
-// // }
-
-// function handlefirst(){
-//   setPage(1)
-// }
 
     return (
 
@@ -150,6 +124,7 @@ function RecordingLibrary(
             <RecordingCard
               key={recording.id}
               recording={recording}
+              onClick={() => onSelectRecording(recording)}
             />
           ))}
         </div>

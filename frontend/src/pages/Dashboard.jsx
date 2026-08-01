@@ -120,9 +120,27 @@ function handleNewRecording(){
     })
 }
 
-function handleSelectRecording(recording){
-  setMainView("viewer");
-  setSelected(recording);
+async function handleSelectRecording(recording) {
+
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(
+        `http://127.0.0.1:8000/recordings/${recording.id}`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    );
+
+    const data = await response.json();
+
+    if (response.ok) {
+        setSelected(data);
+        setMainView("viewer");
+    } else {
+        console.error(data);
+    }
 }
 
 
@@ -158,6 +176,7 @@ function handleSelectRecording(recording){
 
             search={search}
             setSearch={setSearch}
+            onSelectRecording={handleSelectRecording}
           />
           
         </div>
