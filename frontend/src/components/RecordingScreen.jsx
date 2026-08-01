@@ -5,7 +5,7 @@ import { Audio, ThreeDots } from "react-loader-spinner";
 import { BadgeCheck } from "lucide-react";
 // import { formatRecordingDate } from "../utils/formatDate";
 
-function RecordingScreen({ refreshRecording }) {
+function RecordingScreen({ refreshRecordings }) {
   const recorderRef = useRef(null);
   const streamRef = useRef(null);
   const intervalRef = useRef(null);
@@ -68,8 +68,9 @@ function RecordingScreen({ refreshRecording }) {
       }
 
       setIsUploading(false);
-      await refreshRecording();
+      await refreshRecordings();
       setIsCompleted(true);
+      console.log("Completed");
     };
 
     recorder.start();

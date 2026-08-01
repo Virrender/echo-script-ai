@@ -3,12 +3,22 @@ import RecordingViewer from "./RecordingViewer";
 import RecordingLibrary from "./RecordingLibrary";
 
 function MainContent({ 
-  selected, refreshRecording, 
+    selected,
+    refreshRecordings,
     mainView,
+
+    libraryRecordings,
+    page,
+    setPage,
+    totalPages
  }) {
   
   if (mainView === "library"){
     return <RecordingLibrary
+            libraryRecordings={libraryRecordings}
+            page={page}
+            setPage={setPage}
+            totalPages={totalPages}
     />
 
   }
@@ -24,7 +34,7 @@ function MainContent({
 
 
   if (selected?.isNew) {
-    return <RecordingScreen refreshRecording={refreshRecording} />;
+    return <RecordingScreen refreshRecordings={refreshRecordings} />;
   }
 
   return (

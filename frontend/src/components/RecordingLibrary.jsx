@@ -1,49 +1,27 @@
 
 import RecordingCard from "./RecordingCard"
-import { useState, useEffect } from "react";
 import Pagination from "@mui/material/Pagination";
 
-function RecordingLibrary()
+function RecordingLibrary(
+{  libraryRecordings,
+  page,
+  setPage,
+  totalPages,}
+)
 {
 
-const [total, setTotal] = useState(0); 
-const [libraryRecordings, setLibraryRecordings] = useState([]);
-  const [page, setPage] = useState(1);
- let limit = 10;
+// const [total, setTotal] = useState(0); 
+// const [libraryRecordings, setLibraryRecordings] = useState([]);
+// const [page, setPage] = useState(1);
+//  let limit = 10;
 
-const totalPages = Math.ceil(total / limit);
+
 // const arr=Array.from({length:totalPages}).map((_,index)=>index+1)
 
 
 
-async function loadLibraryRecordings(page,limit) {
-    const token = localStorage.getItem("token");
-
-    const response = await fetch(
-     `http://127.0.0.1:8000/recordings?page=${page}&limit=${limit}`,
-
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    );
-    const data = await response.json();
-
-    if (response.ok) {
-      setLibraryRecordings(data.items);
-      setTotal(data.total)
-    } else {
-      console.error(data);
-    }
-  }
 
 
-
-
-  useEffect(() => {
-    loadLibraryRecordings(page,limit); // this is just new React ESLint rule, we can ignore it
-  },[page]);
 
 // function handleNext(){
 //   setPage((prev)=>prev+1)

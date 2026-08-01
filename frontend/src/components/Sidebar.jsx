@@ -1,46 +1,23 @@
 import RecordingCard from "./RecordingCard";
 import { Plus, ChevronsRight } from "lucide-react";
 
-import {useState, useEffect } from "react";
 
 
 function Sidebar({ 
-  selected, 
-  onNewRecording, onSeeAll, 
-  onSelectRecording, }) 
+    sidebarRecordings,
+
+    selected,
+
+    onSeeAll,
+
+    onNewRecording,
+
+    onSelectRecording }) 
   
   {
   
-const [sidebarRecordings, setSidebarRecordings] = useState([]);
 
 
-async function loadSidebarRecordings(page,limit) {
-    const token = localStorage.getItem("token");
-
-    const response = await fetch(
-     ` http://127.0.0.1:8000/recordings?page=${page}&limit=${limit}`,
-
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    );
-    const data = await response.json();
-
-    if (response.ok) {
-      setSidebarRecordings(data.items);
-    } else {
-      console.error(data);
-    }
-  }
-
-
-
-
-  useEffect(() => {
-    loadSidebarRecordings(1,10); // this is just new React ESLint rule, we can ignore it
-  },[]);
 
 
 

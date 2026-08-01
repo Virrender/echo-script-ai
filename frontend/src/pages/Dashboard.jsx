@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
@@ -9,24 +9,83 @@ import MainContent from "../components/MainContent";
 function Dashboard() {
   const [selected, setSelected] = useState(null);
   const [sidebaropen, setSidebaropen] = useState(true);
-  // const [recordings, setRecordings] = useState([]);
   const [recordingKey, setRecordingKey] = useState(0);
   const [mainView, setMainView] = useState("viewer");
-  // const [total, setTotal] = useState(0);
+  const [sidebarRecordings, setSidebarRecordings] = useState([]);
+  const [libraryRecordings, setLibraryRecordings] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(1);
+  const limit = 10;
+  const totalPages = Math.ceil(total / limit);
+
+  async function loadLibraryRecordings(page,limit) {
+      const token = localStorage.getItem("token");
+  
+      const response = await fetch(
+       `http://127.0.0.1:8000/recordings?page=${page}&limit=${limit}`,
+  
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      const data = await response.json();
+  
+      if (response.ok) {
+        setLibraryRecordings(data.items);
+        setTotal(data.total)
+      } else {
+        console.error(data);
+      }
+    }
+  
+  useEffect(() => {
+    loadLibraryRecordings(page,limit); // this is just new React ESLint rule, we can ignore it
+  },[page]);
+
+  async function loadSidebarRecordings(page,limit) {
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(
+     ` http://127.0.0.1:8000/recordings?page=${page}&limit=${limit}`,
+
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+    const data = await response.json();
+
+    if (response.ok) {
+      setSidebarRecordings(data.items);
+    } else {
+      console.error(data);
+    }
+  }
 
 
-  // const [libraryRecordings, setLibraryRecordings] = useState([]);
 
 
+  useEffect(() => {
+    loadSidebarRecordings(1,limit); // this is just new React ESLint rule, we can ignore it
+  },[]);
 
 
+async function refreshRecordings() {
 
+    await Promise.all([
 
-// const totalPages = Math.ceil(total / limit);
-// const arr=Array.from({length:totalPages}).map((_,index)=>index+1)
+        loadSidebarRecordings(1,limit),
 
+        loadLibraryRecordings(page,limit)
 
+    ]);
 
+}
+  
+  
 
 function handleSeeAll(){
   setMainView("library")
@@ -47,21 +106,7 @@ function handleSelectRecording(recording){
   setSelected(recording);
 }
 
-// function handleNext(){
-//   setPage((prev)=>prev+1)
-// }
 
-// function handlePrevious(){
-//   setPage((prev)=>prev-1)
-// }
-
-// // function handlelast(){
-// //   setPage(totalPages)
-// // }
-
-// function handlefirst(){
-//   setPage(1)
-// }
 
 
 
@@ -76,42 +121,27 @@ function handleSelectRecording(recording){
         <div className="flex flex-1 gap-4 min-h-0">
           {sidebaropen && (
             <Sidebar 
-              // recordings={recordings}
-              setSelected={setSelected}
-              sidebaropen={setSidebaropen}
-              setMainView={setMainView}
+              sidebarRecordings={sidebarRecordings}
+              
               selected={selected}
   
               onSeeAll={handleSeeAll}
               onNewRecording={handleNewRecording}
               onSelectRecording={handleSelectRecording}
-              // loadRecordings={loadRecordings}
-              // page={page}
-              // limit={limit}
-              // setPage={setPage}
-
-
-
-          
-    
+              
             />
           )}
 
           <MainContent
             key={recordingKey}
             selected={selected}
-            // refreshRecording={loadRecordings}
-            // recordings={recordings}
             mainView={mainView}
+            refreshRecordings={refreshRecordings}
 
-              // onNext={handleNext}
-              // onPrevious={handlePrevious}
-              // // onLast={handlelast}
-              // onFirst={handlefirst}
-              // // arr={arr}
-              // setPage={setPage}
-
-              
+            libraryRecordings={libraryRecordings}
+            page={page}
+            setPage={setPage}
+            totalPages={totalPages}
 
           />
         </div>
