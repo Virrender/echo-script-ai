@@ -1,5 +1,6 @@
 from enum import Enum
 
-class Order(str,Enum):
-    asc="asc"
-    desc="desc"
+
+class Order(str, Enum):
+    asc = "asc"
+    desc = "desc"

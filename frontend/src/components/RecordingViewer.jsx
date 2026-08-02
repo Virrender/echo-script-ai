@@ -8,43 +8,38 @@ function RecordingViewer({ recording }) {
   const [currentTime, setCurrentTime] = useState(0);
   const audioRef = useRef(null);
 
+  useEffect(() => {
+    let url;
 
+    async function loadAudio() {
+      const token = localStorage.getItem("token");
 
-useEffect(() => {
-
-  let url;
-
-  async function loadAudio() {
-    const token = localStorage.getItem("token");
-
-    const response = await fetch(
-      `http://127.0.0.1:8000/recordings/${recording.id}/audio`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const response = await fetch(
+        `http://127.0.0.1:8000/recordings/${recording.id}/audio`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      }
-    );
+      );
 
-    if (!response.ok) return; 
+      if (!response.ok) return;
 
-    const blob = await response.blob();
+      const blob = await response.blob();
 
-    url = URL.createObjectURL(blob);
+      url = URL.createObjectURL(blob);
 
-    setAudioUrl(url);
-  }
-
-  loadAudio();
-
-  return () => {
-    if (url) {
-      URL.revokeObjectURL(url);
+      setAudioUrl(url);
     }
-  };
-}, [recording.id]);
 
+    loadAudio();
 
+    return () => {
+      if (url) {
+        URL.revokeObjectURL(url);
+      }
+    };
+  }, [recording.id]);
 
   return (
     <>
@@ -76,44 +71,34 @@ useEffect(() => {
               className="w-full"
               onTimeUpdate={() => {
                 setCurrentTime(audioRef.current.currentTime);
-              
-            }}
+              }}
             />
-
-            
           </div>
 
-<article className="space-y-2 text-[17px] leading-8">
-  {recording.segments?.map((segment, index) => (
-    <p
-      key={index}
-      className="text-[#2F2A44]"
-    >
-      {segment.words?.map((word, i) => {
-        const isActive = currentTime >= word.start;
+          <article className="space-y-2 text-[17px] leading-8">
+            {recording.segments?.map((segment, index) => (
+              <p key={index} className="text-[#2F2A44]">
+                {segment.words?.map((word, i) => {
+                  const isActive = currentTime >= word.start;
 
-        return (
-          <span
-            key={i}
-            className={`
+                  return (
+                    <span
+                      key={i}
+                      className={`
               px-0.5
               rounded-sm
               transition-all
               duration-150
-              ${
-                isActive
-                  ? "bg-yellow-100 text-[#2F2A44]"
-                  : ""
-              }
+              ${isActive ? "bg-yellow-100 text-[#2F2A44]" : ""}
             `}
-          >
-            {word.word}{" "}
-          </span>
-        );
-      })}
-    </p>
-  ))}
-</article>
+                    >
+                      {word.word}{" "}
+                    </span>
+                  );
+                })}
+              </p>
+            ))}
+          </article>
         </div>
       </main>
     </>

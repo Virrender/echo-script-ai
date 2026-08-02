@@ -13,7 +13,7 @@ function Navbar({ ontoggleSidebar }) {
             items-center
             justify-between
             "
-        >
+    >
       <div className="flex items-center gap-3">
         <div>
           <button
@@ -49,7 +49,7 @@ function Navbar({ ontoggleSidebar }) {
 
       <div className="flex items-center gap-3">
         <button
-              className="
+          className="
                 flex
                 items-center
                 gap-2

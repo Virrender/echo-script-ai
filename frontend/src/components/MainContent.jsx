@@ -2,35 +2,32 @@ import RecordingScreen from "./RecordingScreen";
 import RecordingViewer from "./RecordingViewer";
 import RecordingLibrary from "./RecordingLibrary";
 
-function MainContent({ 
-    selected,
-    refreshRecordings,
-    mainView,
+function MainContent({
+  selected,
+  refreshRecordings,
+  mainView,
 
-    libraryRecordings,
-    page,
-    setPage,
-    totalPages,
+  libraryRecordings,
+  page,
+  setPage,
+  totalPages,
 
-    search,
-    setSearch,
-    onSelectRecording,
-
-
- }) {
-  
-  if (mainView === "library"){
-    return <RecordingLibrary
-            libraryRecordings={libraryRecordings}
-            page={page}
-            setPage={setPage}
-            totalPages={totalPages}
-            search={search}
-            setSearch={setSearch}
-            onSelectRecording={onSelectRecording}
-
-    />
-
+  search,
+  setSearch,
+  onSelectRecording,
+}) {
+  if (mainView === "library") {
+    return (
+      <RecordingLibrary
+        libraryRecordings={libraryRecordings}
+        page={page}
+        setPage={setPage}
+        totalPages={totalPages}
+        search={search}
+        setSearch={setSearch}
+        onSelectRecording={onSelectRecording}
+      />
+    );
   }
 
   if (!selected) {
@@ -40,8 +37,6 @@ function MainContent({
       </main>
     );
   }
-
-
 
   if (selected?.isNew) {
     return <RecordingScreen refreshRecordings={refreshRecordings} />;

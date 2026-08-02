@@ -1,27 +1,17 @@
 import RecordingCard from "./RecordingCard";
 import { Plus, ChevronsRight } from "lucide-react";
 
+function Sidebar({
+  sidebarRecordings,
 
+  selected,
 
-function Sidebar({ 
-    sidebarRecordings,
+  onSeeAll,
 
-    selected,
+  onNewRecording,
 
-    onSeeAll,
-
-    onNewRecording,
-
-    onSelectRecording }) 
-  
-  {
-  
-
-
-
-
-
-
+  onSelectRecording,
+}) {
   return (
     <>
       <aside
@@ -68,25 +58,26 @@ function Sidebar({
         </div>
 
         <div className="flex-1  min-h-0  overflow-y-auto space-y-2 border-y border-gray-300">
-
           {sidebarRecordings.map((recording) => (
             <RecordingCard
               key={recording.id}
               recording={recording}
               onClick={() => onSelectRecording(recording)}
               isSelected={selected?.id === recording.id}
-
             />
           ))}
         </div>
-                  
 
-        <button 
-        onClick={onSeeAll}
-        className=" w-full gap-0.5 flex justify-center items-center  bg-white text-sm font-medium transition p-1 cursor-pointer text-gray-400  mt-1">
-          See all   <ChevronsRight className="flex justify-center items-center mt-0.5 " size={15}/>
+        <button
+          onClick={onSeeAll}
+          className=" w-full gap-0.5 flex justify-center items-center  bg-white text-sm font-medium transition p-1 cursor-pointer text-gray-400  mt-1"
+        >
+          See all{" "}
+          <ChevronsRight
+            className="flex justify-center items-center mt-0.5 "
+            size={15}
+          />
         </button>
-
       </aside>
     </>
   );

@@ -4,8 +4,6 @@ import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import MainContent from "../components/MainContent";
 
-
-
 function Dashboard() {
   const [selected, setSelected] = useState(null);
   const [sidebaropen, setSidebaropen] = useState(true);
@@ -17,41 +15,41 @@ function Dashboard() {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
-  
+
   const limit = 10;
   const totalPages = Math.ceil(total / limit);
 
-  async function loadLibraryRecordings(page,limit, search="") {
-      const token = localStorage.getItem("token");
-  
-      const response = await fetch(
-       `http://127.0.0.1:8000/recordings?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}`,
-  
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-      const data = await response.json();
-  
-      if (response.ok) {
-        setLibraryRecordings(data.items);
-        setTotal(data.total)
-      } else {
-        console.error(data);
-      }
-    }
-  
-  useEffect(() => {
-    loadLibraryRecordings(page,limit,debouncedSearch); // this is just new React ESLint rule, we can ignore it
-  },[page,debouncedSearch]);
-
-  async function loadSidebarRecordings(page,limit) {
+  async function loadLibraryRecordings(page, limit, search = "") {
     const token = localStorage.getItem("token");
 
     const response = await fetch(
-     ` http://127.0.0.1:8000/recordings?page=${page}&limit=${limit}`,
+      `http://127.0.0.1:8000/recordings?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}`,
+
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+    const data = await response.json();
+
+    if (response.ok) {
+      setLibraryRecordings(data.items);
+      setTotal(data.total);
+    } else {
+      console.error(data);
+    }
+  }
+
+  useEffect(() => {
+    loadLibraryRecordings(page, limit, debouncedSearch); // this is just new React ESLint rule, we can ignore it
+  }, [page, debouncedSearch]);
+
+  async function loadSidebarRecordings(page, limit) {
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(
+      ` http://127.0.0.1:8000/recordings?page=${page}&limit=${limit}`,
 
       {
         headers: {
@@ -68,81 +66,69 @@ function Dashboard() {
     }
   }
 
-
-
+  useEffect(() => {
+    loadSidebarRecordings(1, limit); // this is just new React ESLint rule, we can ignore it
+  }, []);
 
   useEffect(() => {
-    loadSidebarRecordings(1,limit); // this is just new React ESLint rule, we can ignore it
-  },[]);
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 500);
 
-useEffect(() => {
-  const timer = setTimeout(() => {
-    setDebouncedSearch(search);
-  }, 500);
+    return () => clearTimeout(timer);
+  }, [search]);
 
+  // useEffect(() => {
+  //   console.log("Searching:", debouncedSearch);
+  // }, [debouncedSearch]);
 
-  return () => clearTimeout(timer);
-}, [search]);
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch]);
 
-// useEffect(() => {
-//   console.log("Searching:", debouncedSearch);
-// }, [debouncedSearch]);
-
-useEffect(() => {
-  setPage(1);
-}, [debouncedSearch]);
-
-async function refreshRecordings() {
-
+  async function refreshRecordings() {
     await Promise.all([
+      loadSidebarRecordings(1, limit),
 
-        loadSidebarRecordings(1,limit),
-
-        loadLibraryRecordings(page,limit)
-
+      loadLibraryRecordings(page, limit),
     ]);
+  }
 
-}
-  
-  
+  function handleSeeAll() {
+    setMainView("library");
+  }
 
-function handleSeeAll(){
-  setMainView("library")
-}
-
-function handleNewRecording(){
+  function handleNewRecording() {
     setMainView("recording");
-    setRecordingKey((prev)=> prev+1)
+    setRecordingKey((prev) => prev + 1);
     setSelected({
-        id: null,
-        title: "New Recording",
-        isNew: true,
-    })
-}
+      id: null,
+      title: "New Recording",
+      isNew: true,
+    });
+  }
 
-async function handleSelectRecording(recording) {
-
+  async function handleSelectRecording(recording) {
     const token = localStorage.getItem("token");
 
     const response = await fetch(
-        `http://127.0.0.1:8000/recordings/${recording.id}`,
-        {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        }
+      `http://127.0.0.1:8000/recordings/${recording.id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
     );
 
     const data = await response.json();
 
     if (response.ok) {
-        setSelected(data);
-        setMainView("viewer");
+      setSelected(data);
+      setMainView("viewer");
     } else {
-        console.error(data);
+      console.error(data);
     }
-}
-
+  }
 
   return (
     <>
@@ -151,15 +137,14 @@ async function handleSelectRecording(recording) {
 
         <div className="flex flex-1 gap-4 min-h-0">
           {sidebaropen && (
-            <Sidebar 
+            <Sidebar
               sidebarRecordings={sidebarRecordings}
-              
+
               selected={selected}
-  
+
               onSeeAll={handleSeeAll}
               onNewRecording={handleNewRecording}
               onSelectRecording={handleSelectRecording}
-              
             />
           )}
 
@@ -178,7 +163,6 @@ async function handleSelectRecording(recording) {
             setSearch={setSearch}
             onSelectRecording={handleSelectRecording}
           />
-          
         </div>
       </div>
     </>

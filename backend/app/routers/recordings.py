@@ -46,11 +46,9 @@ async def upload(
     clean_segments = []
 
     try:
-        result = model.transcribe(
-            str(filepath),
-            word_timestamps=True)
-        transcript=result["text"]
-        transcript=transcript.strip()
+        result = model.transcribe(str(filepath), word_timestamps=True)
+        transcript = result["text"]
+        transcript = transcript.strip()
         print(f"'{transcript}'")
 
         if not transcript:
@@ -58,39 +56,35 @@ async def upload(
                 filepath.unlink()
             raise HTTPException(
                 status_code=400,
-                detail="No speech detected. Please say something and try again."
+                detail="No speech detected. Please say something and try again.",
             )
-        
 
-        segments=result["segments"]
+        segments = result["segments"]
 
         clean_segments = [
-                {
-                    "start": segment["start"],
-                    "end": segment["end"],
-                    "text": segment["text"],
-                    "words": [
-                        {
-                            "word": word["word"],
-                            "start": word["start"],
-                            "end": word["end"],
-                        }
-                        for word in segment.get("words", [])
-                    ],
-                }
-                for segment in segments
-            ]
+            {
+                "start": segment["start"],
+                "end": segment["end"],
+                "text": segment["text"],
+                "words": [
+                    {
+                        "word": word["word"],
+                        "start": word["start"],
+                        "end": word["end"],
+                    }
+                    for word in segment.get("words", [])
+                ],
+            }
+            for segment in segments
+        ]
 
     except HTTPException:
         # Re-raise our own HTTPException
         raise
 
     except Exception as e:
-            print(f"Whisper Error: {e}")
-            raise HTTPException(
-                status_code=500,
-                detail="Failed to transcribe audio."
-        )
+        print(f"Whisper Error: {e}")
+        raise HTTPException(status_code=500, detail="Failed to transcribe audio.")
 
     # print(transcript)
     # print(result.keys())
@@ -102,7 +96,7 @@ async def upload(
             audio_path=str(relative_path),  # to save in database
             transcript=transcript,
             user_id=current_user.id,
-            segments=clean_segments
+            segments=clean_segments,
         )
         session.add(recording)
         session.commit()
@@ -112,59 +106,45 @@ async def upload(
         print(f"current_user name ======>>>{current_user.username}")
         print("<<<======== Recordings MetaData Saved In Table ======>>>")
 
-
-    return {"message": "saved", "id": recording.id, "transcript": transcript, "segments": clean_segments, "created_at": recording.created_at,}
-
-
+    return {
+        "message": "saved",
+        "id": recording.id,
+        "transcript": transcript,
+        "segments": clean_segments,
+        "created_at": recording.created_at,
+    }
 
 
 @router.get("", response_model=PaginatedRecordingResponse)
 async def recordings(
-    page:int= Query(
-        default=1,
-        ge=1
-    ),
-    limit:int = Query(
-        default=10,
-        gt=1,
-        le=100
-    ),
-    search:str | None = Query(default=None),
-    order:Order = Query (default=Order.desc),
-    current_user: Users = Depends(get_current_user)):
+    page: int = Query(default=1, ge=1),
+    limit: int = Query(default=10, gt=1, le=100),
+    search: str | None = Query(default=None),
+    order: Order = Query(default=Order.desc),
+    current_user: Users = Depends(get_current_user),
+):
 
     with Session(engine) as session:
 
-
-        query=(
-            session.query(Recordings)
-            .filter(Recordings.user_id == current_user.id)
-        )
+        query = session.query(Recordings).filter(Recordings.user_id == current_user.id)
 
         if search:
             search = search.strip()
-        
+
         if search:
-            query = query.filter(
-                Recordings.transcript.ilike(f"%{search}%")
-            )
+            query = query.filter(Recordings.transcript.ilike(f"%{search}%"))
         if order == "desc":
             query = query.order_by(desc(Recordings.created_at))
         else:
             query = query.order_by(asc(Recordings.created_at))
-        
-        recordings = (
-            query
-            .limit(limit)
-            .offset((page-1)*limit)
-            .all()
-        )
-        total= (query.count())
-        
+
+        recordings = query.limit(limit).offset((page - 1) * limit).all()
+        total = query.count()
+
         print(f"==========>{recordings}<==========")
         return {
-            "items":recordings,
-            "total":total,
+            "items": recordings,
+            "total": total,
         }
 
 

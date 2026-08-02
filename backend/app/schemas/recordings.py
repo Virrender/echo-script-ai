@@ -12,9 +12,7 @@ class RecordingResponse(BaseModel):
         "from_attributes": True
     }
 
+
 class PaginatedRecordingResponse(BaseModel):
-    items:list[RecordingResponse]
-    total:int
-
-
-
+    items: list[RecordingResponse]
+    total: int

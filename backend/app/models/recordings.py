@@ -1,4 +1,4 @@
-from sqlalchemy import Integer, String, Column, Text, DateTime, ForeignKey, Index 
+from sqlalchemy import Integer, String, Column, Text, DateTime, ForeignKey, Index
 from sqlalchemy.dialects.postgresql import JSONB
 from app.database.connections import Base
 
@@ -10,7 +10,7 @@ class Recordings(Base):
     created_at = Column(DateTime(timezone=True), nullable=False)
     audio_path = Column(String, nullable=False)
     transcript = Column(Text, nullable=True)
-    segments=Column(JSONB,nullable=True)
+    segments = Column(JSONB, nullable=True)
 
     __table_args__ = (
         Index(

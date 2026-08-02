@@ -65,19 +65,18 @@ function RecordingScreen({ refreshRecordings }) {
       if (response.ok) {
         // setTranscript(data.transcript);
         setCompletedRecording({
-            id: data.id,
-            transcript: data.transcript,
-            segments: data.segments,
-            created_at: data.created_at,
-          });
-          await refreshRecordings();
-          setIsCompleted(true);
+          id: data.id,
+          transcript: data.transcript,
+          segments: data.segments,
+          created_at: data.created_at,
+        });
+        await refreshRecordings();
+        setIsCompleted(true);
       } else {
         alert(data.detail);
       }
 
       setIsUploading(false);
-
     };
 
     recorder.start();
@@ -163,10 +162,8 @@ flex flex-1  flex-col items-center justify-center
   }
 
   if (isCompleted && completedRecording) {
-  return (
-    <RecordingViewer recording={completedRecording} />
-  );
-}
+    return <RecordingViewer recording={completedRecording} />;
+  }
 
   // if (isCompleted) {
   //   return (
@@ -294,7 +291,7 @@ flex flex-1  flex-col items-center justify-center
 
           ${isRecording ? "text-[#6d6a6aca]" : "text-[#928a93c2]"}
           `}
-                  >
+        >
           {minutes}:{secs}
         </p>
 

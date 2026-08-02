@@ -27,20 +27,18 @@ function RecordingCard({ recording, onClick, isSelected }) {
                   : "bg-transparent border-l-4 border-l-transparent"
               }
               `}
-              onClick={onClick}
-                >
+        onClick={onClick}
+      >
+        <p className="text-sm font-semibold text-[#2F2A44] leading-6 line-clamp-1">
+          {recording.transcript}
+        </p>
 
-            <p className="text-sm font-semibold text-[#2F2A44] leading-6 line-clamp-1">
-              {recording.transcript}
-            </p>
-
-            <div className="mt-3 flex items-center gap-1.5 text-gray-500">
-              <Clock3 size={13} strokeWidth={2} />
-              <span className="text-xs font-normal ">
-                {formatRecordingDate(recording.created_at)}
-              </span>
-            </div>
-
+        <div className="mt-3 flex items-center gap-1.5 text-gray-500">
+          <Clock3 size={13} strokeWidth={2} />
+          <span className="text-xs font-normal ">
+            {formatRecordingDate(recording.created_at)}
+          </span>
+        </div>
       </button>
     </>
   );
