@@ -4,6 +4,7 @@
 *.pyc
 
 backend/app/recordings
+backend/app/generations
 
 
 # Frontend

@@ -6,12 +6,10 @@ from fastapi.responses import FileResponse
 from datetime import datetime, timezone, timedelta
 from app.database.connections import engine
 from app.enums import Order
-from pwdlib import PasswordHash
 import os
 import uuid
 from app.models.recordings import Recordings
 
-password_hash = PasswordHash.recommended()
 from app.models.user import Users
 from app.security import get_current_user
 from app.config import BASE_DIR
