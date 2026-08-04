@@ -29,17 +29,18 @@ async def upload(
     current_user: Users = Depends(get_current_user)):
 
     generator = pipeline(
-    text=tts.script,
-    voice="af_heart",
-        )
+        text=tts.script,
+        voice="af_heart",
+            )
 
     audio = b""
-    for _, _, audio_chunk in generator:
-        audio = audio_chunk
-        break
+
+    result = next(generator)
+    audio = result.output.audio.numpy()
 
     filename = f"{uuid.uuid4()}.wav"
 
+        
     filepath = (
             generations_dir / filename
         )
@@ -62,6 +63,7 @@ async def upload(
                 title=tts.title,
                 audio_path=relative_path,
                 script=tts.script,
+                segments=segments,
                 user_id=current_user.id,
         )
         session.add(generation)
@@ -71,7 +73,8 @@ async def upload(
         "message":"saved",
         "title":tts.title,
         "script":tts.script,
-        "audio_path":filepath
+        "audio_path":filepath,
+        "segments":segments
     }
 
 
