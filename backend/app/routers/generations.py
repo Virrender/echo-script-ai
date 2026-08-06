@@ -130,6 +130,26 @@ async def get_generation(
 
         return generation
 
+@router.get("/{generation_id}/audio")
+async def get_audio(generation_id: int, current_user: Users = Depends(get_current_user)):
+    print("GET AUDIO endpoint")
+    with Session(engine) as session:
+        generation = (
+            session.query(Generations).filter(Generations.id == generation_id).first()
+        )
+        if generation is None:
+            raise HTTPException(status_code=404, detail="Generation not found")
+
+        if generation.user_id != current_user.id:
+            raise HTTPException(status_code=403, detail="Forbidden")
+
+        filepath = BASE_DIR / generation.audio_path
+        if not filepath.exists():
+            raise HTTPException(status_code=404, detail="Audio file not found")
+
+        print(f"======>>>>>{filepath}")
+        print(f"======>>>>>Exists {filepath.exists()}")
+        return FileResponse(filepath, media_type="audio/wav")
 
 
 
