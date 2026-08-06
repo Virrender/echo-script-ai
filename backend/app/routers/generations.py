@@ -113,6 +113,24 @@ async def generations(
         }
 
 
+@router.get("/{generation_id}")
+async def get_generation(
+    generation_id: int, current_user: Users = Depends(get_current_user)
+):
+    
+    with Session(engine) as session:
+        generation = (
+            session.query(Generations).filter(Generations.id == generation_id).first()
+        )
+        if recording is None:
+            raise HTTPException(status_code=404, detail="Generation not found")
+
+        if recording.user_id != current_user.id:
+            raise HTTPException(status_code=403, detail="This is not your Generation)
+
+        return generation
+
+
 
 
 
