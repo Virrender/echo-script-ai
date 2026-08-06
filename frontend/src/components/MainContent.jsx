@@ -1,6 +1,7 @@
 import RecordingScreen from "./RecordingScreen";
 import RecordingViewer from "./RecordingViewer";
 import RecordingLibrary from "./RecordingLibrary";
+import GenerationScreen from "./GenerationScreen";
 
 function MainContent({
   selected,
@@ -15,7 +16,13 @@ function MainContent({
   search,
   setSearch,
   onSelectRecording,
+  mode,
 }) {
+
+if (mode === "script") {
+    return <GenerationScreen />;
+}
+ 
   if (mainView === "library") {
     return (
       <RecordingLibrary

@@ -15,6 +15,7 @@ function Dashboard() {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [mode, setMode] = useState("echo");
 
   const limit = 10;
   const totalPages = Math.ceil(total / limit);
@@ -107,6 +108,9 @@ function Dashboard() {
       isNew: true,
     });
   }
+  function handleNewGeneration() {
+    console.log("New Generation");
+}
 
   async function handleSelectRecording(recording) {
     const token = localStorage.getItem("token");
@@ -132,18 +136,36 @@ function Dashboard() {
 
   return (
     <>
-      <div className="h-screen bg-[#F4F0FF] flex flex-col overflow-hidden">
-        <Navbar ontoggleSidebar={() => setSidebaropen((prev) => !prev)} />
+      <div   className={`
+    h-screen
+    flex
+    flex-col
+    overflow-hidden
+    transition-colors
+    duration-300
+    ${
+      mode === "echo"
+        ? "bg-[#F4F0FF]"
+        : "bg-[#9288a7]"
+    }
+  `}
+>
+        <Navbar 
+        ontoggleSidebar={() => setSidebaropen((prev) => !prev)}
+        mode={mode}
+        setMode={setMode}/>
 
         <div className="flex flex-1 gap-4 min-h-0">
           {sidebaropen && (
             <Sidebar
               sidebarRecordings={sidebarRecordings}
+              mode={mode}
 
               selected={selected}
 
               onSeeAll={handleSeeAll}
               onNewRecording={handleNewRecording}
+              onNewGeneration={handleNewGeneration}
               onSelectRecording={handleSelectRecording}
             />
           )}
@@ -162,6 +184,8 @@ function Dashboard() {
             search={search}
             setSearch={setSearch}
             onSelectRecording={handleSelectRecording}
+
+            mode={mode}
           />
         </div>
       </div>

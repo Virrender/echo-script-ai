@@ -3,14 +3,12 @@ import { Plus, ChevronsRight } from "lucide-react";
 
 function Sidebar({
   sidebarRecordings,
-
   selected,
-
   onSeeAll,
-
   onNewRecording,
-
+  onNewGeneration,
   onSelectRecording,
+  mode,
 }) {
   return (
     <>
@@ -29,7 +27,11 @@ function Sidebar({
         "
       >
         <button
-          onClick={onNewRecording}
+          onClick={
+    mode === "echo"
+        ? onNewRecording
+        : onNewGeneration
+}
           className="
             w-full
             flex
@@ -48,12 +50,17 @@ function Sidebar({
             cursor-pointer
             "
         >
-          New Recording <Plus size={18} />{" "}
+          {mode === "echo"
+          ? "New Recording"
+          : "New Generation"}
+           <Plus size={18} />{" "}
         </button>
 
         <div className="mt-4 ml-3 mb-3">
           <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-400">
-            Recent Recordings
+            {mode === "echo"
+          ? "Recent Recordings"
+          : "Recent Generations"}
           </h3>
         </div>
 

@@ -1,19 +1,29 @@
-import { Logs } from "lucide-react";
+import { Logs, ScrollText , Speech } from "lucide-react";
 
-function Navbar({ ontoggleSidebar }) {
+function Navbar({ 
+  ontoggleSidebar,
+  mode,
+  setMode,
+ }) {
   return (
     <nav
-      className="
-            h-16
-            bg-white
-            border-b
-            border-gray-200
-            px-6
-            flex
-            items-center
-            justify-between
-            "
-    >
+  className={`
+    h-14
+    border-b
+    border-gray-200
+    px-6
+    flex
+    items-center
+    justify-between
+    transition-colors
+    duration-300
+    ${
+      mode === "echo"
+        ? "bg-white"
+        : "bg-[#c9a5d2]"
+    }
+  `}
+>
       <div className="flex items-center gap-3">
         <div>
           <button
@@ -35,15 +45,47 @@ function Navbar({ ontoggleSidebar }) {
         </div>
 
         <div
-          className="
+          className={`
             text-xl
             font-semibold
             tracking-tight
-            text-[#4d2d4d]
+            ${
+              mode === "echo"
+                ? "text-[#4d2d4d]"
+                : "text-[#56545e]"
+            }
             select-none
-            "
+          `}
         >
-          <h2>Echo Script</h2>
+          <button 
+          onClick={() =>
+                setMode((prev) =>
+                    prev === "echo" ? "script" : "echo"
+                )
+            }
+          
+          className="
+            w-full
+            flex
+            items-center
+            justify-center
+            gap-2
+            active:scale-[0.98]
+            cursor-pointer"
+            >
+            
+
+
+            {mode === "echo"
+            ? "Echo Script "
+            : "Script Echo" }
+
+           {mode === "echo"
+              ? <ScrollText size={20}/>
+              : <Speech size={20}/>}
+                    
+          </button>
+          
         </div>
       </div>
 

@@ -70,13 +70,14 @@ async def upload(
         )
         session.add(generation)
         session.commit()
+        session.refresh(generation)
 
     return {
-        "message": "saved",
-        "title": tts.title,
-        "script": tts.script,
-        "audio_path": filepath,
+        "id": generation.id,
+        "title": generation.title,
+        "script": generation.script,
         "segments": segments,
+        "created_at": generation.created_at,
     }
 
 
