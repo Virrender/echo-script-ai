@@ -1,7 +1,9 @@
-
-from fastapi import APIRouter , Depends, Query
+from fastapi import APIRouter, Depends, Query, HTTPException
 from app.models.user import Users
 from sqlalchemy.orm import Session
+from sqlalchemy import desc, asc, func
+from app.enums import Order
+from fastapi.responses import FileResponse
 from app.models.generations import Generations
 from app.security import get_current_user
 from app.database.connections import engine
@@ -22,17 +24,18 @@ print("Loading pipeline...")
 pipeline = KPipeline(lang_code="a")
 print("Pipeline loaded!")
 
-router=APIRouter(prefix="/generation", tags=["Generations"])
+router = APIRouter(prefix="/generation", tags=["Generations"])
+
 
 @router.post("/upload")
 async def upload(
-    tts: GenerationsCreate,
-    current_user: Users = Depends(get_current_user)):
+    tts: GenerationsCreate, current_user: Users = Depends(get_current_user)
+):
 
     generator = pipeline(
         text=tts.script,
         voice="af_heart",
-            )
+    )
 
     audio = b""
 
@@ -41,10 +44,7 @@ async def upload(
 
     filename = f"{uuid.uuid4()}.wav"
 
-        
-    filepath = (
-            generations_dir / filename
-        )
+    filepath = generations_dir / filename
     sf.write(filepath, audio, 24000)
 
     relative_path = f"generations/{filename}"
@@ -60,23 +60,23 @@ async def upload(
         segments.append(segment)
 
     with Session(engine) as session:
-        generation= Generations(
-                created_at=datetime.now(timezone.utc),
-                title=tts.title,
-                audio_path=relative_path,
-                script=tts.script,
-                segments=segments,
-                user_id=current_user.id,
+        generation = Generations(
+            created_at=datetime.now(timezone.utc),
+            title=tts.title,
+            audio_path=relative_path,
+            script=tts.script,
+            segments=segments,
+            user_id=current_user.id,
         )
         session.add(generation)
         session.commit()
 
     return {
-        "message":"saved",
-        "title":tts.title,
-        "script":tts.script,
-        "audio_path":filepath,
-        "segments":segments
+        "message": "saved",
+        "title": tts.title,
+        "script": tts.script,
+        "audio_path": filepath,
+        "segments": segments,
     }
 
 
@@ -91,7 +91,9 @@ async def generations(
 
     with Session(engine) as session:
 
-        query = session.query(Generations).filter(Generations.user_id == current_user.id)
+        query = session.query(Generations).filter(
+            Generations.user_id == current_user.id
+        )
 
         if search:
             search = search.strip()
@@ -117,21 +119,24 @@ async def generations(
 async def get_generation(
     generation_id: int, current_user: Users = Depends(get_current_user)
 ):
-    
+
     with Session(engine) as session:
         generation = (
             session.query(Generations).filter(Generations.id == generation_id).first()
         )
-        if recording is None:
+        if generation is None:
             raise HTTPException(status_code=404, detail="Generation not found")
 
-        if recording.user_id != current_user.id:
-            raise HTTPException(status_code=403, detail="This is not your Generation)
+        if generation.user_id != current_user.id:
+            raise HTTPException(status_code=403, detail="This is not your Generation")
 
         return generation
 
+
 @router.get("/{generation_id}/audio")
-async def get_audio(generation_id: int, current_user: Users = Depends(get_current_user)):
+async def get_audio(
+    generation_id: int, current_user: Users = Depends(get_current_user)
+):
     print("GET AUDIO endpoint")
     with Session(engine) as session:
         generation = (
@@ -143,6 +148,11 @@ async def get_audio(generation_id: int, current_user: Users = Depends(get_curren
         if generation.user_id != current_user.id:
             raise HTTPException(status_code=403, detail="Forbidden")
 
+        if not generation.audio_path:
+            raise HTTPException(
+                status_code=404, detail="Audio has not been generated yet."
+            )
+
         filepath = BASE_DIR / generation.audio_path
         if not filepath.exists():
             raise HTTPException(status_code=404, detail="Audio file not found")
@@ -150,8 +160,3 @@ async def get_audio(generation_id: int, current_user: Users = Depends(get_curren
         print(f"======>>>>>{filepath}")
         print(f"======>>>>>Exists {filepath.exists()}")
         return FileResponse(filepath, media_type="audio/wav")
-
-
-
-
-    

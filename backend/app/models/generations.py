@@ -8,7 +8,7 @@ class Generations(Base):
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
     created_at = Column(DateTime(timezone=True), nullable=False)
-    title= Column(String,nullable=False)
+    title = Column(String, nullable=False)
     audio_path = Column(String, nullable=True)
     script = Column(Text, nullable=True)
     segments = Column(JSONB, nullable=True)

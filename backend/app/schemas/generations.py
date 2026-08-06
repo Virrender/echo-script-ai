@@ -1,10 +1,11 @@
 from pydantic import BaseModel
 from datetime import datetime
 
+
 class GenerationsCreate(BaseModel):
-    title:str
+    title: str
     script: str
-    
+
 
 class GenerationResponse(BaseModel):
     id: int
@@ -20,4 +21,3 @@ class GenerationResponse(BaseModel):
 class PaginatedGenerationResponse(BaseModel):
     items: list[GenerationResponse]
     total: int
-
