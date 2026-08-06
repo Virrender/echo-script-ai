@@ -17,30 +17,38 @@ function Navbar({
     justify-between
     transition-colors
     duration-300
-    ${
-      mode === "echo"
-        ? "bg-white"
-        : "bg-[#c9a5d2]"
-    }
+      ${
+        mode === "echo"
+          ? "bg-white"
+          : "bg-[#211D29]"
+      }
   `}
 >
       <div className="flex items-center gap-3">
         <div>
           <button
             onClick={ontoggleSidebar}
-            className="
-        
-              rounded-lg
-              p-2
-              duration-200
-              transition
-              hover:bg-gray-100
-              active:scale-95
-              cursor-pointer
-
-              "
+            className={`
+            rounded-lg
+            p-2
+            duration-200
+            transition
+            ${
+            mode === "echo"
+            ? "hover:bg-gray-100"
+            : "hover:bg-[#302A3A]"
+            }
+            active:scale-95
+            cursor-pointer
+            `}
           >
-            <Logs size={22} strokeWidth={2} />
+            <Logs size={22} strokeWidth={2}
+              className={
+    mode === "echo"
+      ? "text-[#2F2A44]"
+      : "text-[#F5F3FF]"
+  }  
+  />
           </button>
         </div>
 
@@ -51,8 +59,8 @@ function Navbar({
             tracking-tight
             ${
               mode === "echo"
-                ? "text-[#4d2d4d]"
-                : "text-[#56545e]"
+              ? "text-[#4d2d4d]"
+              : "text-[#F5F3FF]"
             }
             select-none
           `}

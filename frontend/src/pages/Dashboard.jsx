@@ -17,8 +17,13 @@ function Dashboard() {
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [mode, setMode] = useState("echo");
 
+  const [sidebarGenerations, setSidebarGenerations] = useState([]);
+const [libraryGenerations, setLibraryGenerations] = useState([]);
+const [generationTotal, setGenerationTotal] = useState(0);
+
   const limit = 10;
-  const totalPages = Math.ceil(total / limit);
+const recordingTotalPages = Math.ceil(total / limit);
+const generationTotalPages = Math.ceil(generationTotal / limit);
 
   async function loadLibraryRecordings(page, limit, search = "") {
     const token = localStorage.getItem("token");
@@ -42,15 +47,42 @@ function Dashboard() {
     }
   }
 
-  useEffect(() => {
+
+
+  async function loadLibraryGenerations(page, limit, search = "") {
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(
+      `http://127.0.0.1:8000/generation?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}`,
+
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+    const data = await response.json();
+
+    if (response.ok) {
+      setLibraryGenerations(data.items);
+      setGenerationTotal(data.total);
+    } else {
+      console.error(data);
+    }
+  }
+
+    useEffect(() => {
     loadLibraryRecordings(page, limit, debouncedSearch); // this is just new React ESLint rule, we can ignore it
+    loadLibraryGenerations(page, limit, debouncedSearch);
   }, [page, debouncedSearch]);
+
+
 
   async function loadSidebarRecordings(page, limit) {
     const token = localStorage.getItem("token");
 
     const response = await fetch(
-      ` http://127.0.0.1:8000/recordings?page=${page}&limit=${limit}`,
+      `http://127.0.0.1:8000/recordings?page=${page}&limit=${limit}`,
 
       {
         headers: {
@@ -67,8 +99,30 @@ function Dashboard() {
     }
   }
 
+    async function loadSidebarGenerations(page, limit) {
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(
+      `http://127.0.0.1:8000/generation?page=${page}&limit=${limit}`,
+
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+    const data = await response.json();
+
+    if (response.ok) {
+      setSidebarGenerations(data.items);;
+    } else {
+      console.error(data);
+    }
+  }
+
   useEffect(() => {
     loadSidebarRecordings(1, limit); // this is just new React ESLint rule, we can ignore it
+    loadSidebarGenerations(1, limit);
   }, []);
 
   useEffect(() => {
@@ -90,8 +144,10 @@ function Dashboard() {
   async function refreshRecordings() {
     await Promise.all([
       loadSidebarRecordings(1, limit),
+      loadSidebarGenerations(1, limit),
 
-      loadLibraryRecordings(page, limit),
+      loadLibraryRecordings(page, limit, debouncedSearch),
+      loadLibraryGenerations(page, limit, debouncedSearch),
     ]);
   }
 
@@ -108,9 +164,24 @@ function Dashboard() {
       isNew: true,
     });
   }
+
   function handleNewGeneration() {
-    console.log("New Generation");
+  setMainView("recording");
+  setRecordingKey((prev) => prev + 1);
+
+  setSelected({
+    id: null,
+    title: "New Generation",
+    isNew: true,
+  });
 }
+
+useEffect(() => {
+  setSelected(null);
+  setMainView("viewer");
+  setSearch("");
+  setPage(1);
+}, [mode]);
 
   async function handleSelectRecording(recording) {
     const token = localStorage.getItem("token");
@@ -134,6 +205,30 @@ function Dashboard() {
     }
   }
 
+  async function handleSelectGeneration(generation) {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch(
+    `http://127.0.0.1:8000/generation/${generation.id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  const data = await response.json();
+
+  if (response.ok) {
+    setSelected(data);
+    setMainView("viewer");
+  } else {
+    console.error(data);
+  }
+}
+console.log("Recordings:", sidebarRecordings);
+console.log("Generations:", sidebarGenerations);
+
   return (
     <>
       <div   className={`
@@ -145,8 +240,8 @@ function Dashboard() {
     duration-300
     ${
       mode === "echo"
-        ? "bg-[#F4F0FF]"
-        : "bg-[#9288a7]"
+        ? "bg-[#F7F3FA]"
+        : "bg-[#17151D]"
     }
   `}
 >
@@ -158,15 +253,25 @@ function Dashboard() {
         <div className="flex flex-1 gap-4 min-h-0">
           {sidebaropen && (
             <Sidebar
-              sidebarRecordings={sidebarRecordings}
-              mode={mode}
+               mode={mode}
+               sidebarRecordings={sidebarRecordings}
+                sidebarGenerations={sidebarGenerations}
+              onSelectRecording={
+                mode === "echo"
+                  ? handleSelectRecording
+                  : handleSelectGeneration
+              }
 
-              selected={selected}
-
-              onSeeAll={handleSeeAll}
-              onNewRecording={handleNewRecording}
               onNewGeneration={handleNewGeneration}
-              onSelectRecording={handleSelectRecording}
+            
+              selected={selected}
+              onSeeAll={handleSeeAll}
+
+              onNewRecording={
+                mode === "echo"
+                  ? handleNewRecording
+                  : handleNewGeneration
+              }
             />
           )}
 
@@ -179,13 +284,20 @@ function Dashboard() {
             libraryRecordings={libraryRecordings}
             page={page}
             setPage={setPage}
-            totalPages={totalPages}
+            totalPages={
+              mode === "echo"
+                ? recordingTotalPages
+                : generationTotalPages
+            }
 
             search={search}
             setSearch={setSearch}
             onSelectRecording={handleSelectRecording}
 
             mode={mode}
+            libraryGenerations={libraryGenerations}
+            onSelectRecording={handleSelectRecording}
+            onSelectGeneration={handleSelectGeneration}
           />
         </div>
       </div>

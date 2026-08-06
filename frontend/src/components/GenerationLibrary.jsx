@@ -1,16 +1,15 @@
 import RecordingCard from "./RecordingCard";
 import Pagination from "@mui/material/Pagination";
 
-function RecordingLibrary({
-  libraryRecordings,
+function GenerationLibrary({
+  libraryGenerations,
   page,
   setPage,
   totalPages,
   search,
   setSearch,
-  onSelectRecording,
+  onSelectGeneration,
   mode
- 
 }) {
   return (
     <div
@@ -21,7 +20,7 @@ function RecordingLibrary({
     h-full
     px-8
     py-6
-    bg-[#F4F0FF]
+    bg-[#17151D]
   "
     >
       <div
@@ -42,7 +41,7 @@ function RecordingLibrary({
         text-[#2F2A44]
         "
         >
-          All Recordings
+          All  Generations
         </h1>
 
         <p
@@ -51,10 +50,10 @@ function RecordingLibrary({
       max-w-md
       text-base
       leading-7
-      text-[#6F687A]
+      text-gray-500
         "
         >
-          Browse and manage all your recordings.
+          Browse and manage all your voice generations.
         </p>
       </div>
 
@@ -69,27 +68,28 @@ function RecordingLibrary({
       >
         <input
           type="text"
-          placeholder="Search recordings..."
+          placeholder="Search generations..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="
       w-full
       rounded-full
       border
-      border-gray-200
       
+    
       px-4
       py-2.5
       text-sm
-      bg-white
-    text-[#2F2A44]
-    placeholder:text-[#9A93A6]
+      bg-[#211D29]
+    border-[#3A3347]
+    text-[#F5F3FF]
+    placeholder:text-[#8F889F]
       
       
       shadow-sm
       outline-none
       transition
-      focus:border-[#c6c3c7]
+      focus:border-[#745383]
       focus:ring-2
       focus:ring-[#745383]/20
     "
@@ -100,9 +100,10 @@ function RecordingLibrary({
         className="
     rounded-3xl
     border
-    border-[#E5DDF0]
+   
     shadow-md
-    bg-white
+    bg-[#211D29]
+    border-[#302A3A]
     flex-1
     min-h-0
     mx-20
@@ -120,12 +121,13 @@ function RecordingLibrary({
       space-y-3
     "
         >
-          {libraryRecordings.map((recording) => (
+          {libraryGenerations.map((generation) => (
             <RecordingCard
-              key={recording.id}
-              recording={recording}
-              onClick={() => onSelectRecording(recording)}
-              mode={mode}
+                key={generation.id}
+                recording={generation}
+                displayTitle={generation.title}
+                onClick={() => onSelectGeneration(generation)}
+                mode={mode}
             />
           ))}
         </div>
@@ -140,15 +142,28 @@ function RecordingLibrary({
   "
       >
         <Pagination
-          count={totalPages}
-          page={page}
-          onChange={(event, page) => {
+        count={totalPages}
+        page={page}
+        onChange={(event, page) => {
             setPage(page);
-          }}
+        }}
+        sx={{
+            "& .MuiPaginationItem-root": {
+            color: "#E8E1F2",
+            borderColor: "#3A3347",
+            },
+            "& .Mui-selected": {
+            backgroundColor: "#745383 !important",
+            color: "#fff",
+            },
+            "& .MuiPaginationItem-root:hover": {
+            backgroundColor: "#302A3A",
+            },
+        }}
         />
       </div>
     </div>
   );
 }
 
-export default RecordingLibrary;
+export default GenerationLibrary;

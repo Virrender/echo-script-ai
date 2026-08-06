@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import GenerationViewer from "./GenerationViewer";
-// import {  ThreeDots } from "react-loader-spinner";
+import {  ThreeDots } from "react-loader-spinner";
 
 // import { formatRecordingDate } from "../utils/formatDate";
 
@@ -55,6 +55,61 @@ async function generateVoice() {
   }
 }
 
+if (isGenerating) {
+  return (
+    <main   className="
+    flex-1
+    overflow-y-auto
+    px-8
+    py-10
+  ">
+      <div
+    className="
+      mx-auto
+      flex
+      min-h-full
+      max-w-2xl
+      items-center
+      justify-center
+    "
+  >
+
+      <div
+        className="
+          flex
+          flex-col
+          items-center
+          rounded-3xl
+          bg-[#211D29]
+          px-14
+          py-12
+          shadow-lg
+        "
+      >
+        <h1 className="mt-4 text-3xl font-bold text-[#F5F3FF]">
+          Generating voice...
+        </h1>
+
+        <p className="mt-5 text-center text-sm text-[#AAA4B8]">
+          Turning your script into natural speech.
+        </p>
+
+        <ThreeDots
+          visible
+          height="70"
+          width="70"
+          color="#B58AD6"
+        />
+
+        <p className="mt-5 text-sm text-[#8F889F]">
+          This usually takes a few seconds.
+        </p>
+         </div>
+      </div>
+    </main>
+  );
+}
+
 if (isCompleted && completedGeneration) {
     return (
         <GenerationViewer
@@ -65,92 +120,104 @@ if (isCompleted && completedGeneration) {
 
 //   const minutes = String(Math.floor(seconds / 60)).padStart(2, "0");
 //   const secs = String(seconds % 60).padStart(2, "0");
-
-  return (
-    <main className="flex flex-1 items-center justify-center">
-      <div
+return (
+  <main className="flex flex-1 flex-col items-center justify-center">
+    <div
+      className="
+        w-full
+        max-w-md
+        bg-[#211D29]
+        rounded-3xl
+        shadow-lg
+        px-10
+        py-10
+      "
+    >
+      <h1
         className="
-          w-full
-          max-w-2xl
-          bg-stone-100
-          rounded-3xl
-          shadow-lg
-          p-10
+          text-center
+          text-3xl
+          font-bold
+          text-[#F5F3FF]
         "
       >
-        <h1
-          className="
-            text-3xl
-            font-bold
-            text-[#3B3554]
-            text-center
-          "
-        >
-          Script Echo
-        </h1>
+        Script Echo
+      </h1>
 
-        <p
-          className="
-            mt-3
-            text-center
-            text-gray-500
-          "
-        >
-          Turn your script into natural speech.
-        </p>
+      <p
+        className="
+          mt-2
+          mb-7
+          text-center
+          text-[#AAA4B8]
+        "
+      >
+        Turn your script into natural speech.
+      </p>
 
-        <input
+      <input
         value={title}
         onChange={(e) => setTitle(e.target.value)}
-          type="text"
-          placeholder="Title..."
-          className="
-            mt-8
-            w-full
-            rounded-xl
-            border
-            border-gray-200
-            p-3
-            outline-none
-          "
-        />
+        type="text"
+        placeholder="Title..."
+        className="
+          mb-4
+          w-full
+          rounded-xl
+          border
+        border-[#3A3347]
+        bg-[#17151D]
+        text-[#F5F3FF]
+        placeholder:text-[#8F889F]
+          px-4
+          py-3
+          outline-none
+          transition
+          focus:border-[#745383]
+        "
+      />
 
-        <textarea
+      <textarea
         value={script}
         onChange={(e) => setScript(e.target.value)}
-          placeholder="Write something..."
-          className="
-            mt-4
-            h-56
-            w-full
-            resize-none
-            rounded-2xl
-            border
-            border-gray-200
-            p-4
-            outline-none
-          "
-        />
+        placeholder="Write your script..."
+        className="
+          h-40
+          w-full
+          resize-none
+          rounded-2xl
+          border
+        border-[#3A3347]
+        bg-[#17151D]
+        text-[#F5F3FF]
+        placeholder:text-[#8F889F]
+          p-4
+          outline-none
+          transition
+          focus:border-[#745383]
+        "
+      />
 
-        <button
+      <button
         onClick={generateVoice}
-          className="
-            mt-6
-            w-full
-            rounded-xl
-            bg-[#5A486E]
-            py-3
-            font-medium
-            text-white
-            transition
-            hover:bg-[#4A395E]
-            cursor-pointer
-          "
-        >
-          Generate Voice
-        </button>
-      </div>
-    </main>
-  );
+        className="
+          mt-6
+          w-full
+          rounded-xl
+          py-3
+          font-medium
+          transition
+          bg-[#B58AD6]
+        text-[#17151D]
+        hover:bg-[#C9A3E5]
+          active:scale-[0.98]
+          cursor-pointer
+        "
+      >
+        Generate Voice
+      </button>
+    </div>
+  </main>
+);
 }
 export default GenerationScreen;

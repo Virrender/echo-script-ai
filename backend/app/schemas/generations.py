@@ -9,6 +9,7 @@ class GenerationsCreate(BaseModel):
 
 class GenerationResponse(BaseModel):
     id: int
+    title: str
     created_at: datetime
     script: str | None
     segments: list | None

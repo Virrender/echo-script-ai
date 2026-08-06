@@ -52,16 +52,16 @@ function GenerationViewer({ generation }) {
                 py-10"
         >
           <header className="mb-8">
-            <h1 className="text-3xl font-bold text-[#2F2A44]">
+            <h1 className="text-3xl font-bold text-[#F5F3FF]">
               {generation.title}
             </h1>
 
-            <div className="mt-3 flex items-center gap-2 text-gray-500">
+            <div className="mt-3 flex items-center gap-2 text-[#AAA4B8]">
               <Clock3 size={14}></Clock3>
               <span> {formatRecordingDate(generation.created_at)}</span>
             </div>
           </header>
-          <hr className="my-8 border-gray-200" />
+          <hr className="my-8 border-[#302A3A]" />
 
           <div className="mb-8">
             <audio
@@ -75,7 +75,7 @@ function GenerationViewer({ generation }) {
             />
           </div>
 
-            <article className="text-[17px] leading-8 text-[#2F2A44]">
+            <article className="text-[17px] leading-8 text-[#F5F3FF]">
             {generation.segments?.map((word, index) => {
                 const isActive = currentTime >= word.start;
 
@@ -87,7 +87,11 @@ function GenerationViewer({ generation }) {
                     rounded-sm
                     transition-all
                     duration-150
-                    ${isActive ? "bg-yellow-100 text-[#2F2A44]" : ""}
+                    ${
+                    isActive
+                        ? "bg-[#5A4520] text-[#FFF7D6]"
+                        : ""
+                    }
                     `}
                 >
                     {word.word}{" "}
