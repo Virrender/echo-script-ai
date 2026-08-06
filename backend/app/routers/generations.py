@@ -1,5 +1,5 @@
 
-from fastapi import APIRouter , Depends
+from fastapi import APIRouter , Depends, Query
 from app.models.user import Users
 from sqlalchemy.orm import Session
 from app.models.generations import Generations
@@ -12,6 +12,7 @@ from kokoro import KPipeline
 import soundfile as sf
 import os
 import uuid
+from app.schemas.generations import PaginatedGenerationResponse
 
 generations_dir = BASE_DIR / "generations"
 os.makedirs(generations_dir, exist_ok=True)
@@ -48,14 +49,15 @@ async def upload(
 
     relative_path = f"generations/{filename}"
 
-    segments = [
-    {
-        "word": token.text,
-        "start": token.start_ts,
-        "end": token.end_ts,
-    }
-    for token in result.tokens
-]
+    segments = []
+
+    for token in result.tokens:
+        segment = {
+            "word": token.text,
+            "start": token.start_ts,
+            "end": token.end_ts,
+        }
+        segments.append(segment)
 
     with Session(engine) as session:
         generation= Generations(
@@ -77,6 +79,38 @@ async def upload(
         "segments":segments
     }
 
+
+@router.get("", response_model=PaginatedGenerationResponse)
+async def generations(
+    page: int = Query(default=1, ge=1),
+    limit: int = Query(default=10, gt=1, le=100),
+    search: str | None = Query(default=None),
+    order: Order = Query(default=Order.desc),
+    current_user: Users = Depends(get_current_user),
+):
+
+    with Session(engine) as session:
+
+        query = session.query(Generations).filter(Generations.user_id == current_user.id)
+
+        if search:
+            search = search.strip()
+
+        if search:
+            query = query.filter(Generations.script.ilike(f"%{search}%"))
+        if order == "desc":
+            query = query.order_by(desc(Generations.created_at))
+        else:
+            query = query.order_by(asc(Generations.created_at))
+
+        generations = query.limit(limit).offset((page - 1) * limit).all()
+        total = query.count()
+
+        print(f"==========>{generations}<==========")
+        return {
+            "items": generations,
+            "total": total,
+        }
 
 
 
