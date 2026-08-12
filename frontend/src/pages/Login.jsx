@@ -85,6 +85,21 @@ shadow-md
             </button>
 
             <p className="text-sm text-center text-red-500">{error}</p>
+            <p className="mt-6 text-center text-sm text-gray-500">
+              Don't have an account?{" "}
+              <button
+                type="button"
+                onClick={() => navigate("/signup")}
+                className="
+                  font-medium
+                  text-[#745383]
+                  hover:underline
+                  cursor-pointer
+                "
+              >
+                Sign up
+              </button>
+            </p>
           </form>
         </div>
       </div>

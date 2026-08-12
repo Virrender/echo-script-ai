@@ -193,7 +193,7 @@ async function downloadAudio() {
               strokeWidth={2}
               className="shrink-0"
             />
-            <span>Download Markdown</span>
+            <span>Download Text</span>
           </button>
         </div>
           </div>
