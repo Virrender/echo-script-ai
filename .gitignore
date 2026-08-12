@@ -19,4 +19,4 @@ frontend/dist/ #just a good pratice although not used yet
 .DS_Store
 Thumbs.db
 
-*env*
+myvenv
