@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Clock3 } from "lucide-react";
+import { Clock3, Download, FileText } from "lucide-react";
 import { formatRecordingDate } from "../utils/formatDate";
 
 function GenerationViewer({ generation }) {
@@ -41,6 +41,64 @@ function GenerationViewer({ generation }) {
     };
   }, [generation.id]);
 
+function downloadMarkdown() {
+  const markdown = `# ${generation.title}
+
+${generation.script}
+`;
+
+  const blob = new Blob([markdown], {
+    type: "text/markdown",
+  });
+
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `${generation.title || "generation"}.md`;
+
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+
+  URL.revokeObjectURL(url);
+}
+
+async function downloadAudio() {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch(
+    `http://127.0.0.1:8000/generation/${generation.id}/audio`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  if (!response.ok) {
+    alert("Unable to download audio.");
+    return;
+  }
+
+  const blob = await response.blob();
+
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `${generation.title || "generation"}.wav`;
+
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+
+  URL.revokeObjectURL(url);
+}
+
+
+
+
   return (
     <>
       <main className="flex-1 overflow-y-auto">
@@ -73,12 +131,81 @@ function GenerationViewer({ generation }) {
                 setCurrentTime(audioRef.current.currentTime);
               }}
             />
+          <div className="mt-4 flex gap-3">
+            <button
+              onClick={downloadAudio}
+    className="
+      inline-flex
+      items-center
+      justify-center
+      gap-2
+      rounded-xl
+      bg-[#745383]
+      px-5
+      py-2.5
+      text-sm
+      font-medium
+      leading-none
+      text-white
+      shadow-sm
+      transition
+      hover:bg-[#5A3F68]
+      hover:shadow
+      active:scale-[0.97]
+      cursor-pointer
+    "
+            >
+    <Download
+      size={16}
+      strokeWidth={2}
+      className="shrink-0"
+    />
+    <span>Download Audio</span>
+            </button>
+
+            <button
+              onClick={downloadMarkdown}
+    className="
+      inline-flex
+      items-center
+      justify-center
+      gap-2
+      rounded-xl
+      border
+      border-[#D8C9DF]
+      bg-white
+      px-5
+      py-2.5
+      text-sm
+      font-medium
+      leading-none
+      text-[#5A486E]
+      shadow-sm
+      transition
+      hover:bg-[#e0d9ec]
+      hover:border-[#C9B5D3]
+      hover:shadow
+      active:scale-[0.97]
+      cursor-pointer
+    "
+  >
+
+    <FileText
+      size={16}
+      strokeWidth={2}
+      className="shrink-0"
+    />
+    <span>Download Text</span>
+            </button>
+          </div>
+
+
           </div>
 
             <article className="text-[17px] leading-8 text-[#F5F3FF]">
             {generation.segments?.map((word, index) => {
                 const isActive = currentTime >= word.start;
-
+                
                 return (
                 <span
                     key={index}
