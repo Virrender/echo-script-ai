@@ -17,7 +17,7 @@ router = APIRouter(prefix="/auth", tags=["Authentication"])
 async def signup(user: UserSignup):
     hashed_pswd = password_hash.hash(user.password)
     with Session(engine) as session:
-        new_user = Users(username=user.username, hashed_password=hashed_pswd)
+        new_user = Users(first_name=user.first_name, last_name=user.last_name, email=user.email, hashed_password=hashed_pswd)
         session.add(new_user)
         session.commit()
 

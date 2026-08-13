@@ -14,14 +14,17 @@ Search recordings and generations
 Pagination
 User authentication
 Audio and Markdown file downloads
-Tech Stack
+
+
+#Tech Stack
 Frontend
 React
 Vite
 Tailwind CSS
 Lucide React
 Material UI
-Backend
+
+#Backend
 FastAPI
 SQLAlchemy
 PostgreSQL

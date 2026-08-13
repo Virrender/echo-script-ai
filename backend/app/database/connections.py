@@ -1,9 +1,11 @@
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy import create_engine
+from dotenv import load_dotenv
+load_dotenv()
 
-engine = create_engine(
-    "postgresql+psycopg://postgres:123456@localhost:5432/echo_script"
-)
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+engine = create_engine(DATABASE_URL)
 
 
 class Base(DeclarativeBase):

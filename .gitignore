@@ -1,22 +1,24 @@
 # Backend
-
-*__pycache__
+__pycache__/
 *.pyc
 
-backend/app/recordings
-backend/app/generations
+backend/app/recordings/
+backend/app/generations/
 
+# Virtual environments
+myvenv/
+wslvenv/
+
+# Environment variables
+backend/.env
 
 # Frontend
 frontend/node_modules/
-frontend/dist/ #just a good pratice although not used yet
-
+frontend/dist/
 
 # VS Code
 .vscode/
 
-# OS files, just a good pratice although not used yet
+# OS files
 .DS_Store
 Thumbs.db
-
-myvenv
