@@ -38,6 +38,17 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 #     tokenUrl="https://oauth2.googleapis.com/token",
 # )
 
+def create_access_token(data: dict):
+
+    to_encode = data.copy()
+
+    expire = datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+
+    to_encode.update({"exp": expire})
+
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return encoded_jwt
+
 
 def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
     token = credentials.credentials
@@ -46,11 +57,11 @@ def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(securit
     except JWTError:
         raise HTTPException(status_code=401, detail="Invalid or expired token")
 
-    username = payload["sub"]
+    email = payload["sub"]
     print(token)
     with Session(engine) as session:
 
-        db_user = session.query(Users).filter(Users.username == username).first()
+        db_user = session.query(Users).filter(Users.email == email).first()
 
     if db_user is None:
         raise HTTPException(status_code=401, detail="User not found")
@@ -64,13 +75,3 @@ from app.config import (
 )
 
 
-def create_access_token(data: dict):
-
-    to_encode = data.copy()
-
-    expire = datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-
-    to_encode.update({"exp": expire})
-
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    return encoded_jwt

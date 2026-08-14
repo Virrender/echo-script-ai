@@ -32,6 +32,7 @@ from app.schemas.recordings import PaginatedRecordingResponse
 async def upload(
     current_user: Users = Depends(get_current_user), audio: UploadFile = File(...)
 ):
+
     filename = f"{uuid.uuid4()}.webm"
     filepath = (
         recording_dir / filename
@@ -101,7 +102,6 @@ async def upload(
         session.refresh(recording)
 
         print(f"current _user_id=====>{current_user.id}")
-        print(f"current_user name ======>>>{current_user.username}")
         print("<<<======== Recordings MetaData Saved In Table ======>>>")
 
     return {
