@@ -4,6 +4,7 @@ from sqlalchemy import (
     Column,
     DateTime,
     func,
+    Boolean
 )
 
 from app.database.connections import Base
@@ -16,8 +17,9 @@ class Users(Base):
     id = Column(Integer, primary_key=True)
     username = Column(String, nullable=True)
     email = Column(String, nullable=True)
+    is_email_verified = Column(Boolean, default=False, nullable=False)
     hashed_password = Column(String, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(
-        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )

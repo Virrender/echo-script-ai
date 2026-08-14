@@ -6,12 +6,19 @@ from sqlalchemy import pool
 from app.database.connections import Base
 from app.models.user import Users
 from app.models.recordings import Recordings
+from app.models.generations import Generations
 
+import os
 from alembic import context
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
+config.set_main_option(
+    "sqlalchemy.url",
+    os.getenv("DATABASE_URL")
+)
+
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
