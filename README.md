@@ -1,42 +1,57 @@
-Echo Script
+# Echo Script
 
-Echo Script is a web application for recording audio, transcribing speech, and generating speech from written scripts.
+A web application for recording audio, transcribing speech, and generating speech from written scripts.
 
-It has two main modes:
+## Two Modes
 
-Echo Script — record  audio and get a timestamped transcript.
-Script Echo — enter a script and generate speech with synchronized word timestamps.
-Features
-Echo
-Browser-based audio recording
-Audio upload and storage
-Speech-to-text using Whisper
-Word-level timestamps
-Synchronized audio and transcript playback
-Search, pagination, and downloads
-Script Echo
-Script creation and saving
-Text-to-speech using Kokoro
-Word-level timestamps
-Synchronized audio and text playback
-Search, pagination, and downloads
-Export scripts as .md
-Authentication
-User signup and login
-Gmail-only email validation
-OTP email verification
-Resend OTP
-JWT authentication
-Automatic login after verification
-Tech Stack
+### Echo Script
 
-Frontend: React, Vite, Tailwind CSS, React Router, Material UI, Framer Motion
+Record audio and get a timestamped transcript.
 
-Backend: FastAPI, SQLAlchemy, PostgreSQL, Alembic, Redis, JWT
+### Script Echo
 
-AI / Audio: Whisper, Kokoro TTS, FFmpeg
+Enter a script and generate speech with synchronized word timestamps.
 
-Project Structure
+## Features
+
+### Echo
+
+- Browser-based audio recording
+- Audio upload and storage
+- Speech-to-text using Whisper
+- Word-level timestamps
+- Synchronized audio and transcript playback
+- Search, pagination, and downloads
+
+### Script Echo
+
+- Create and save scripts
+- Text-to-speech using Kokoro
+- Word-level timestamps
+- Synchronized audio and text playback
+- Search, pagination, and downloads
+- Export scripts as `.md`
+
+## Authentication
+
+- User signup and login
+- Gmail-only email validation
+- OTP email verification
+- Resend OTP
+- JWT authentication
+- Automatic login after verification
+
+## Tech Stack
+
+| Area | Technologies |
+|---|---|
+| Frontend | React, Vite, Tailwind CSS, React Router, Material UI, Framer Motion |
+| Backend | FastAPI, SQLAlchemy, PostgreSQL, Alembic, Redis, JWT |
+| AI / Audio | Whisper, Kokoro TTS, FFmpeg |
+
+## Project Structure
+
+```text
 echo-script/
 ├── frontend/
 │   ├── src/
@@ -56,58 +71,83 @@ echo-script/
 │   │   ├── security.py
 │   │   └── config.py
 │   ├── alembic/
-│   └── requirements.txt
+│   └── requirements-wsl.txt
 │
 └── README.md
+```
 
-API
-Authentication
-POST /auth/signup
-POST /auth/verify-email
-POST /auth/resend-otp
-POST /auth/login
+## API
 
-Recordings
-POST /recordings/upload
-GET  /recordings
-GET  /recordings/{id}
-GET  /recordings/{id}/audio
+### Authentication
 
-Generations
-POST /generation/upload
-GET  /generation
-GET  /generation/{id}
-GET  /generation/{id}/audio
+- `POST /auth/signup`
+- `POST /auth/verify-email`
+- `POST /auth/resend-otp`
+- `POST /auth/login`
 
-Setup
-Backend
+### Recordings
+
+- `POST /recordings/upload`
+- `GET /recordings`
+- `GET /recordings/{id}`
+- `GET /recordings/{id}/audio`
+
+### Generations
+
+- `POST /generation/upload`
+- `GET /generation`
+- `GET /generation/{id}`
+- `GET /generation/{id}/audio`
+
+## Setup
+
+### Backend
+
+Create a virtual environment:
+
+```bash
 python -m venv myvenv
+```
 
+Activate it on Linux / WSL:
 
-Linux/bash:
-
-myvenv/bin/activate
-
+```bash
+source myvenv/bin/activate
+```
 
 Install dependencies:
 
+```bash
 pip install -r requirements-wsl.txt
+```
 
-
-Create a .env file and configure the required environment variables.
+Create a `.env` file and configure the required environment variables.
 
 Start the backend:
 
+```bash
 uvicorn app.main:app --reload
+```
 
-Frontend
+### Frontend
+
+Install dependencies:
+
+```bash
 npm install
+```
+
+Start the development server:
+
+```bash
 npm run dev
+```
 
-Environment Variables
+## Environment Variables
 
-Create a .env file in the backend:
+Create a `.env` file in the backend directory:
 
+```env
 SECRET_KEY=your_secret_key_here
 DATABASE_URL=your_database_url_here
 
@@ -115,10 +155,13 @@ SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
 SMTP_USERNAME=your_email_here
 SMTP_PASSWORD=your_app_password_here
+```
 
+## How It Works
 
-How It Works
-Echo
+### Echo
+
+```text
 Audio
   ↓
 FastAPI
@@ -130,8 +173,11 @@ Timestamped Transcript
 PostgreSQL + File Storage
   ↓
 Synchronized Playback
+```
 
-Script Echo
+### Script Echo
+
+```text
 Script
   ↓
 FastAPI
@@ -143,8 +189,11 @@ Audio + Word Timestamps
 PostgreSQL + File Storage
   ↓
 Synchronized Playback
+```
 
-Email Verification
+### Email Verification
+
+```text
 Signup
   ↓
 Generate OTP
@@ -158,25 +207,25 @@ Verify OTP
 Create Account
   ↓
 Login
+```
 
-Database
+## Database
 
-PostgreSQL stores persistent application data such as users, recordings, generations, transcripts, timestamps, file paths, and metadata.
+- **PostgreSQL** stores persistent application data including users, recordings, generations, transcripts, timestamps, file paths, and metadata.
+- **Redis** handles temporary signup data and email verification OTPs.
+- **Alembic** manages database migrations.
 
-Redis handles temporary signup data and email verification OTPs.
+## Future Improvements
 
-Alembic manages database migrations.
+- Recording and generation deletion
+- Improved audio controls
+- More authentication options
+- Additional STT/TTS models
+- Production deployment
+- Improved error handling
+- More speech customization
 
-Future Improvements
-Recording and generation deletion
-Improved audio controls
-More authentication options
-Additional STT/TTS models
-Production deployment
-Improved error handling
-More speech customization
-Author
+## Author
 
-Virender
-
-GitHub: (https://github.com/Virrender)
+- **Virender** - 
+(https://github.com/Virrender)
