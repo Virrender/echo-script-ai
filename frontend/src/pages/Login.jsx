@@ -2,22 +2,25 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
   async function handleLogin(e) {
     e.preventDefault();
     setError("");
 
+    setLoading(true);
     const response = await fetch("http://127.0.0.1:8000/auth/login", {
       method: "POST",
       headers: {
         "content-Type": "application/json",
       },
       body: JSON.stringify({
-        username: username,
+        email: email,
         password: password,
       }),
     });
@@ -28,6 +31,7 @@ function Login() {
       localStorage.setItem("token", data.access_token);
       navigate("/dashboard");
     } else {
+      setLoading(false);
       console.error(data.detail);
       setError(data.detail);
     }
@@ -48,11 +52,11 @@ function Login() {
           <form onSubmit={(e) => handleLogin(e)} className="mt-8 space-y-5">
             <input
               className="w-full px-4 py-3  rounded-xl border border-gray-300 bg-white text-[#413e42] placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-[#d1ccd2cf] transition"
-              type="text"
-              name="username"
-              placeholder="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
 
             <input
@@ -65,6 +69,7 @@ function Login() {
             />
 
             <button
+            disabled={loading}
               className="
 w-full
 rounded-xl
@@ -78,12 +83,31 @@ hover:bg-[#969196]
 active:scale-[0.98]
 cursor-pointer
 shadow-md
+disabled:cursor-not-allowed
+disabled:opacity-70
 "
               type="submit"
             >
-              Login
-            </button>
 
+  {loading ? (
+    <span className="flex items-center justify-center gap-2">
+      <span
+        className="
+          h-5
+          w-5
+          animate-spin
+          rounded-full
+          border-2
+          border-white/40
+          border-t-white
+        "
+      />
+      Signing in...
+    </span>
+  ) : (
+    "Login"
+  )}
+</button>
             <p className="text-sm text-center text-red-500">{error}</p>
             <p className="mt-6 text-center text-sm text-gray-500">
               Don't have an account?{" "}
