@@ -1,63 +1,182 @@
-#Echo Script
+Echo Script
 
-#About
+Echo Script is a web application for recording audio, transcribing speech, and generating speech from written scripts.
 
-Echo Script is a web application for voice recording, speech-to-text transcription, and text-to-speech generation. It provides synchronized word-level timestamps so users can follow the transcript while audio plays.
+It has two main modes:
 
-#Features
-Voice recording
-Speech-to-text transcription with Whisper
+Echo Script — record  audio and get a timestamped transcript.
+Script Echo — enter a script and generate speech with synchronized word timestamps.
+Features
+Echo
+Browser-based audio recording
+Audio upload and storage
+Speech-to-text using Whisper
 Word-level timestamps
-Text-to-speech generation with Kokoro
 Synchronized audio and transcript playback
-Search recordings and generations
-Pagination
-User authentication
-Audio and Markdown file downloads
-
-
-#Tech Stack
-Frontend
-React
-Vite
-Tailwind CSS
-Lucide React
-Material UI
-
-#Backend
-FastAPI
-SQLAlchemy
-PostgreSQL
-Whisper
-Kokoro TTS
+Search, pagination, and downloads
+Script Echo
+Script creation and saving
+Text-to-speech using Kokoro
+Word-level timestamps
+Synchronized audio and text playback
+Search, pagination, and downloads
+Export scripts as .md
+Authentication
+User signup and login
+Gmail-only email validation
+OTP email verification
+Resend OTP
 JWT authentication
+Automatic login after verification
+Tech Stack
 
+Frontend: React, Vite, Tailwind CSS, React Router, Material UI, Framer Motion
 
-#Backend API
+Backend: FastAPI, SQLAlchemy, PostgreSQL, Alembic, Redis, JWT
 
-Main API endpoints include:
+AI / Audio: Whisper, Kokoro TTS, FFmpeg
 
-POST /auth/signup — Create a user account
-POST /auth/login — Authenticate a user
-POST /recordings/upload — Upload a recording for transcription
-GET /recordings — Get recordings
-GET /recordings/{id} — Get a recording
-GET /recordings/{id}/audio — Get recording audio
-POST /generation/upload — Generate speech from a script
-GET /generation — Get generations
-GET /generation/{id} — Get a generation
-GET /generation/{id}/audio — Get generated audio
+Project Structure
+echo-script/
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   └── utils/
+│   └── package.json
+│
+├── backend/
+│   ├── app/
+│   │   ├── database/
+│   │   ├── email/
+│   │   ├── models/
+│   │   ├── redis/
+│   │   ├── routers/
+│   │   ├── schemas/
+│   │   ├── security.py
+│   │   └── config.py
+│   ├── alembic/
+│   └── requirements.txt
+│
+└── README.md
 
-#Setup
+API
+Authentication
+POST /auth/signup
+POST /auth/verify-email
+POST /auth/resend-otp
+POST /auth/login
 
-cd backend
+Recordings
+POST /recordings/upload
+GET  /recordings
+GET  /recordings/{id}
+GET  /recordings/{id}/audio
+
+Generations
+POST /generation/upload
+GET  /generation
+GET  /generation/{id}
+GET  /generation/{id}/audio
+
+Setup
+Backend
 python -m venv myvenv
-Activate the virtual environment.
-myvenv\Scripts\activate
-pip install -r requirements.txt
+
+
+Linux/bash:
+
+myvenv/bin/activate
+
+
+Install dependencies:
+
+pip install -r requirements-wsl.txt
+
+
+Create a .env file and configure the required environment variables.
+
+Start the backend:
+
 uvicorn app.main:app --reload
 
-#Frontend
-cd frontend
+Frontend
 npm install
 npm run dev
+
+Environment Variables
+
+Create a .env file in the backend:
+
+SECRET_KEY=your_secret_key_here
+DATABASE_URL=your_database_url_here
+
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USERNAME=your_email_here
+SMTP_PASSWORD=your_app_password_here
+
+
+How It Works
+Echo
+Audio
+  ↓
+FastAPI
+  ↓
+Whisper
+  ↓
+Timestamped Transcript
+  ↓
+PostgreSQL + File Storage
+  ↓
+Synchronized Playback
+
+Script Echo
+Script
+  ↓
+FastAPI
+  ↓
+Kokoro TTS
+  ↓
+Audio + Word Timestamps
+  ↓
+PostgreSQL + File Storage
+  ↓
+Synchronized Playback
+
+Email Verification
+Signup
+  ↓
+Generate OTP
+  ↓
+Store temporary data in Redis
+  ↓
+Send OTP
+  ↓
+Verify OTP
+  ↓
+Create Account
+  ↓
+Login
+
+Database
+
+PostgreSQL stores persistent application data such as users, recordings, generations, transcripts, timestamps, file paths, and metadata.
+
+Redis handles temporary signup data and email verification OTPs.
+
+Alembic manages database migrations.
+
+Future Improvements
+Recording and generation deletion
+Improved audio controls
+More authentication options
+Additional STT/TTS models
+Production deployment
+Improved error handling
+More speech customization
+Author
+
+Virender
+
+GitHub: (https://github.com/Virrender)
