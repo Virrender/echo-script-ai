@@ -333,7 +333,7 @@ const isGmail =
           Already have an account?{" "}
           <button
             type="button"
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/login")}
             className="
               font-medium
               text-[#745383]
