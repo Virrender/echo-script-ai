@@ -6,7 +6,7 @@ load_dotenv()
 
 BASE_DIR = Path(__file__).parent
 
-SECRET_KEY = "any_thing_eg_123456"
+SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 120
 
