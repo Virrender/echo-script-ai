@@ -115,7 +115,7 @@ function Navbar({
                 cursor-pointer
               "
         >
-          User Profile
+          👤
         </button>
       </div>
     </nav>

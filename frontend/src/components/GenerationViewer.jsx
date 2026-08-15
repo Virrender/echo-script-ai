@@ -211,7 +211,7 @@ async function downloadAudio() {
                     key={index}
                     className={`
                     px-0.5
-                    rounded-sm
+                  
                     transition-all
                     duration-150
                     ${
