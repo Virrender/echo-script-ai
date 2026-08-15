@@ -15,7 +15,6 @@ class Users(Base):
     first_name=Column(String, nullable=True)
     last_name=Column(String, nullable=True)
     id = Column(Integer, primary_key=True)
-    username = Column(String, nullable=True)
     email = Column(String, nullable=True)
     is_email_verified = Column(Boolean, default=False, nullable=False)
     hashed_password = Column(String, nullable=True)
