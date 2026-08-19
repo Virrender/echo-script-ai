@@ -23,6 +23,22 @@ import secrets
 
 @router.post("/signup")
 async def signup(user: UserSignup):
+
+    # 1. Check whether email is already registered
+    with Session(engine) as session:
+        existing_user = (
+            session.query(Users)
+            .filter(Users.email == user.email)
+            .first()
+        )
+
+        if existing_user is not None:
+            raise HTTPException(
+                status_code=400,
+                detail="Email already registered",
+            )
+
+    # 2. Hash password before storing temporary signup data
     hashed_pswd = password_hash.hash(user.password)
 
     signup_data = {
@@ -32,20 +48,24 @@ async def signup(user: UserSignup):
         "hashed_password": hashed_pswd,
     }
 
+    # 3. Store signup data temporarily in Redis
     redis_client.setex(
         f"signup:{user.email}",
         300,
         json.dumps(signup_data),
     )
 
+    # 4. Generate random OTP
     otp = str(secrets.randbelow(900000) + 100000)
 
+    # 5. Store OTP in Redis for 5 minutes
     redis_client.setex(
         f"otp:{user.email}",
         300,
         otp,
     )
 
+    # 6. Send OTP to user's email
     send_email(
         user.email,
         "Echo Script OTP",
@@ -53,15 +73,14 @@ async def signup(user: UserSignup):
         f"Valid only for 5 minutes.",
     )
 
-
     return {
         "message": "OTP sent to your email"
     }
 
-
 @router.post("/verify-email")
 async def verify_email(data: VerifyEmailRequest):
 
+    # 1. Get OTP from Redis
     stored_otp = redis_client.get(f"otp:{data.email}")
 
     if stored_otp is None:
@@ -70,37 +89,42 @@ async def verify_email(data: VerifyEmailRequest):
             detail="OTP expired or not found",
         )
 
-
+    # 2. Verify OTP
     if stored_otp != data.otp:
         raise HTTPException(
             status_code=400,
             detail="Invalid OTP",
         )
-    
-    signup_data = redis_client.get(f"signup:{data.email}")
+
+    # 3. Get temporary signup data
+    signup_data = redis_client.get(
+        f"signup:{data.email}"
+    )
 
     if signup_data is None:
         raise HTTPException(
-                status_code=400,
-                detail="Signup session expired",
-            )
+            status_code=400,
+            detail="Signup session expired",
+        )
 
     signup_data = json.loads(signup_data)
 
+    # 4. Create permanent user
     with Session(engine) as session:
 
+        # Final safety check
         existing_user = (
             session.query(Users)
             .filter(Users.email == data.email)
             .first()
         )
-    
+
         if existing_user is not None:
             raise HTTPException(
                 status_code=400,
                 detail="Email already registered",
             )
-        
+
         new_user = Users(
             first_name=signup_data["first_name"],
             last_name=signup_data["last_name"],
@@ -108,24 +132,26 @@ async def verify_email(data: VerifyEmailRequest):
             hashed_password=signup_data["hashed_password"],
             is_email_verified=True,
         )
+
         session.add(new_user)
         session.commit()
 
-        session.refresh(new_user) #to get newely created user's data
-        redis_client.delete(f"otp:{data.email}")
-        redis_client.delete(f"signup:{data.email}")
+        session.refresh(new_user)
 
-        #to automatically login user
-        access_token = create_access_token(
-            data={"sub": new_user.email}
-     )
+    # 5. Signup is complete → remove temporary Redis data
+    redis_client.delete(f"otp:{data.email}")
+    redis_client.delete(f"signup:{data.email}")
+
+    # 6. Automatically log the user in
+    access_token = create_access_token(
+        data={"sub": new_user.email}
+    )
 
     return {
         "message": "Email verified successfully",
         "access_token": access_token,
         "token_type": "bearer",
     }
-
 
 
 @router.post("/resend-otp")
